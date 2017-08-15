@@ -3,7 +3,7 @@
 #include "Utils.h"
 
 int ThermistorPin = 0;
-int valvePin = 9;
+int valvePin = 10;
 float Vcounts = 0.0;
 float currentTemp = 0.0;
 int valveSetpoint;
@@ -15,12 +15,18 @@ ValveControl valveController = ValveControl();
 Utils utils = Utils();
 
 
-bool debug = false;
+const bool debug = false;
 
 void setup()
 {
 
     pinMode(valvePin, OUTPUT);
+
+    // enable all pins 0 - 12 for output mode
+    for (int i; i < 18; i++)
+    {
+         pinMode(i, OUTPUT);
+    }
 
     Serial.begin(9600);  // begin serial communication
 
@@ -33,7 +39,7 @@ void setup()
 
 void loop()
 {
-    valveSetpoint = utils.getFlameInput(&ticks_100ms);
+    // valveSetpoint = utils.getFlameInput(&ticks_100ms);
 
 
     Vcounts = analogRead(ThermistorPin);    // read the thermistor pin
@@ -48,6 +54,29 @@ void loop()
       Serial.print("currentTemp (F) = ");
       Serial.println(currentTemp);
     }
+
+    
+    for (int i; i < 18; i++)
+    {
+         analogWrite(i, 250);
+         Serial.print("Output pin = ");
+         Serial.println(i);
+         delay(1500);
+    }
+
+    /*
+    // Loop over valve control output settings
+    for (int i = 100; i < 255; i++)
+    {
+      analogWrite(valvePin, i);
+      if (debug)
+      {
+        Serial.print("Valve = ");
+        Serial.println(i);
+      }
+      delay(300);  
+    }
+    */
 
     //
     // get valve setpoint based on current probe temp
@@ -64,8 +93,5 @@ void loop()
    // set valve open amount
     analogWrite(valvePin, valveSetpoint);
     */
-
-    delay(100);
-
 
 }
