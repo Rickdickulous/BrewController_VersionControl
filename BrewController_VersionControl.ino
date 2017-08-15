@@ -1,7 +1,6 @@
 #include "TempController.h"  // TODO: Update name to TempSensor
 # include "ValveControl.h"
 #include "Utils.h"
-// some minor change asdf
 
 int ThermistorPin = 0;
 int valvePin = 9;
