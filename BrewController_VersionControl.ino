@@ -1,9 +1,9 @@
 #include "TempController.h"  // TODO: Update name to TempSensor
-# include "ValveControl.h"
+#include "ValveControl.h"
 #include "Utils.h"
 
 int ThermistorPin = 0;
-int valvePin = 9;
+int valvePin = 6;
 float Vcounts = 0.0;
 float currentTemp = 0.0;
 int valveSetpoint;
@@ -14,8 +14,18 @@ TempController tempController = TempController();  // temperature control module
 ValveControl valveController = ValveControl();
 Utils utils = Utils();
 
+void setVal(int setVal)
+{
+   Serial.print("Valve set to ");
+   Serial.println(setVal);
+   analogWrite(valvePin, setVal);
+   delay(3000);  
+}
 
-bool debug = false;
+
+const bool debug = true;
+
+void setVal(int);
 
 void setup()
 {
@@ -33,7 +43,7 @@ void setup()
 
 void loop()
 {
-    valveSetpoint = utils.getFlameInput(&ticks_100ms);
+    // valveSetpoint = utils.getFlameInput(&ticks_100ms);
 
 
     Vcounts = analogRead(ThermistorPin);    // read the thermistor pin
@@ -48,6 +58,31 @@ void loop()
       Serial.print("currentTemp (F) = ");
       Serial.println(currentTemp);
     }
+    /*
+    setVal(100);
+    setVal(125);
+    setVal(150);
+    setVal(175);
+    setVal(200);    
+    setVal(225);
+    setVal(250);
+    */
+    analogWrite(valvePin, 200);
+    /*
+    // Loop over valve control output settings
+    for (int i = 80; i < 150; i+= 5)
+    {
+      analogWrite(valvePin, i);
+      if (debug)
+      {
+        Serial.print("Valve = ");
+        Serial.println(i);
+      }
+    }  
+      */
+      delay(1000);  
+    
+    
 
     //
     // get valve setpoint based on current probe temp
@@ -64,8 +99,5 @@ void loop()
    // set valve open amount
     analogWrite(valvePin, valveSetpoint);
     */
-
-    delay(100);
-
 
 }

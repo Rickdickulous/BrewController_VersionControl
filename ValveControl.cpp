@@ -33,4 +33,5 @@ int ValveControl::calcSetpoint(float currentTemp, int currentSetpoint)
     const int MedHigh = 225;
     const int High = 255;       */
 
+
 ValveControl::~ValveControl(void) {}
