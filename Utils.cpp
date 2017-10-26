@@ -2,13 +2,17 @@
 
 extern bool debug;
 
-Utils::Utils()
-{
 
+float Utils::convertInputToTemp_f(int& thermistorReading_counts)
+{
+    Rt = R1 / (1024/thermistorReading_counts - 1);
+    float temp_C = (-26.65) * log(Rt) + 271.11;
+    float temp_F = temp_C * 1.8 + 32;
+    return temp_F;
 }
 
 
-int Utils::getFlameInput(int* ticks)
+int Utils::getFlameInput(int& ticks)
 {
     int retVal = 0;
     incomingByte = 0;
@@ -29,19 +33,28 @@ int Utils::getFlameInput(int* ticks)
     if (incomingByte > 0)
     {
         Serial.print("Received: ");
-    Serial.println(incomingByte);
+        Serial.println(incomingByte);
     }
 
     // TODO: Enter a - z for flame level. a = 100, z = 250
-
-
-
 
     *ticks += 100;
 }
 
 
-Utils::~Utils()
-{
 
+
+/*
+float TempController::convertInputToTemp_C(float Vcounts)
+{
+    Rt = R1 / (1024/Vcounts - 1);
+    float temp_C = (-26.65) * log(Rt) + 271.11;
+    return temp_C;
 }
+
+
+float TempController::cToF(float temp_c)
+{
+    return temp_c * 1.8 + 32;
+}
+*/
