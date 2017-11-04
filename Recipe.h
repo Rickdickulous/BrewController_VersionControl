@@ -23,5 +23,5 @@ private:
   
   int hopAdditions_minsLeftInBoil[10] = {0};
 };
-#endif
 
+#endif  // Recipe_h

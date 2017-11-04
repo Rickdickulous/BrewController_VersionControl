@@ -9,7 +9,7 @@ public:
     Utils(){};
 
     float convertInputToTemp_f(int&);
-    int getFlameInput(int*);
+    int getFlameInput(int&);
 
     int calcValveSetpoint(float& currentTemp_f, int const& CurrentSetpoint_f)
     {

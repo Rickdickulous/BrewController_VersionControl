@@ -19,7 +19,7 @@ int Utils::getFlameInput(int& ticks)
     if (debug)
     {
         Serial.print("ticks = ");
-        Serial.println(*ticks);
+        Serial.println(ticks);
     }
 
     Serial.println("Enter integer between 100 - 255 to set flame output:");
@@ -38,7 +38,7 @@ int Utils::getFlameInput(int& ticks)
 
     // TODO: Enter a - z for flame level. a = 100, z = 250
 
-    *ticks += 100;
+    ticks += 100;
 }
 
 

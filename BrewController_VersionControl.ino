@@ -1,5 +1,15 @@
+// Dick Bilt Libraries
 #include "Utils.h"
+#include "Display.h"
+
+// display libraries
+#include "SPI.h"
+#include "Adafruit_GFX.h"
+#include "Adafruit_ILI9341.h"
+
+
 Utils utils = Utils();
+Display disp = Display();
 
 
 // variable declarations
@@ -9,7 +19,7 @@ int valveSetpoint;
 unsigned long ticks_100ms = 0;  // print using lu
 
 
-// CPin Declarations
+// Pin Declarations
 int const ValvePin = 6;
 int const ThermistorPin = 0;
 int const buzzerPin = 8;
@@ -36,21 +46,7 @@ void printDebug(void)
 }
 
 
-void setup()
-{
-    pinMode(ValvePin, OUTPUT);
-    pinMode(buzzerPin, OUTPUT);
-    
-    Serial.begin(9600);  // begin serial communication
-
-    /*
-    Serial.println("Hit a key to start");
-    while( Serial.available() == 0 ) {}  // stays here until 1 or more bytes are pushed to the receive buffer
-    Serial.flush();  // waits for data to finishing transmitting to the serial buffer before moving on
-    */
-}
-
-void loop()
+void everythingTempControl()
 {
     // valveSetpoint = utils.getFlameInput(ticks_100ms);
 
@@ -77,5 +73,28 @@ void loop()
     }
     analogWrite(ValvePin, valveSetpoint);  // set valve open amount
     
-    delay(1000);
+    delay(1000);  
 }
+
+void setup()
+{
+    pinMode(ValvePin, OUTPUT);
+    pinMode(buzzerPin, OUTPUT);
+
+    disp.init();
+    
+    Serial.begin(9600);  // begin serial communication
+
+    /*
+    Serial.println("Hit a key to start");
+    while( Serial.available() == 0 ) {}  // stays here until 1 or more bytes are pushed to the receive buffer
+    Serial.flush();  // waits for data to finishing transmitting to the serial buffer before moving on
+    */
+}
+
+void loop()
+{
+  // disp.drawSquare();
+
+}
+  
