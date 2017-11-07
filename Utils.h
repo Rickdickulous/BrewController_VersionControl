@@ -2,36 +2,46 @@
 #define Utils_h
 
 #include "Arduino.h"
+#include "pitches.h"
+
+#define STR(x) Serial.print(#x); Serial.print(" = "); Serial.println(x);
+#define RICK_MIN 135
+#define JIM_MIN 132
 
 class Utils
 {
 public:
     Utils(){};
 
-    float convertInputToTemp_f(int&);
-    int getFlameInput(int&);
+    double currentTemp_f;
+    int valveSetpoint;
+    int const CurrentTempSetpoint_f = 177;
 
-    int calcValveSetpoint(float& currentTemp_f, int const& CurrentSetpoint_f)
+    float convertInputToTemp_f(float&);
+    int getFlameInput(int&);
+    void makeNoise(void);
+    void handleFlameSensor(int&);
+
+    bool noiseMade = false;
+    
+    int calcValveSetpoint()
     {
         int retVal;
-        /* *********************
-        NOTE: Could also base flame output based on percentage
-              of difference between setPoint and current Temp.
-        ********************* */
-        float diff = (float) CurrentSetpoint_f - currentTemp_f;
+        float diff = (float) CurrentTempSetpoint_f - currentTemp_f;
     
         if (diff < 2)
-            {retVal = 135;}
-        else if (diff < 5)
-            {retVal = 160;}
+            {valveSetpoint = JIM_MIN; 
+              if (false == noiseMade)
+              {makeNoise(); noiseMade = true;}
+            }  
+        else if (diff < 4)
+            {valveSetpoint = 180;}
+        else if (diff < 7)
+            {valveSetpoint = 200;}
         else if (diff < 10)
-            {retVal = 200;}
-        else if (diff < 15)
-            {retVal = 220;}
+            {valveSetpoint = 225;}
         else
-            {retVal = 255;}
-    
-        return retVal;
+            {valveSetpoint = 255;}
     }
 
     ~Utils(){};

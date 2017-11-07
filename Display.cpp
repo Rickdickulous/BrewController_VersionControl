@@ -36,26 +36,43 @@
 #define SCREEN_WIDTH_PIXELS 240
 # define SCREEN_HEIGHT_PIXELS 320
 
-void Display::init(void)
+void Display::init(Utils& utils)
 {
 	  // Use hardware SPI (on Uno, #13, #12, #11) and the above for CS/DC
     tft.begin();
-    drawSquare();
-    printOnScreen();
+    tft.fillScreen(DARKGREY);
+    // drawSquare();
+    printOnScreen(utils);
 }
 
 void Display::drawSquare(void)
 {
     // yield() may be necessary to prevent watchdog timeouts on blocking calls which cause hardware resets
-    tft.fillScreen(BLUE);
+    tft.fillScreen(DARKGREY);
     tft.fillRect(SCREEN_WIDTH_PIXELS/2, SCREEN_HEIGHT_PIXELS/2, 50, 75, YELLOW);
     tft.drawRect(SCREEN_WIDTH_PIXELS/4, SCREEN_HEIGHT_PIXELS/4, 20, 20, CYAN);  
 }
 
-void Display::printOnScreen(void)
+void Display::printOnScreen(Utils& utils)
 {
-  tft.setCursor(10, 50);
-  tft.setTextColor(ILI9341_RED);    tft.setTextSize(2);
-  tft.print("Hello World!");
-  tft.println("Now");
+  // *** Output setup *** 
+  tft.fillScreen(DARKGREY);
+  tft.setTextColor(GREENYELLOW);    
+  tft.setTextSize(2);
+  
+  // *** Display Target Temp *** 
+  tft.setCursor(0, 50);
+  tft.print("Target Temp: ");
+  tft.println(utils.CurrentTempSetpoint_f);
+
+  // *** Display Current Water Temp ***
+  tft.setCursor(0, 100);
+  tft.print("Actual Temp: ");
+  tft.println(utils.currentTemp_f);
+
+  // *** Display Valve Setpoint ***
+  tft.setCursor(0, 150);
+  tft.print("Valve Setpoint = ");
+  tft.println(utils.valveSetpoint);
+  
 }
