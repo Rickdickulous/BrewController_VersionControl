@@ -8,6 +8,13 @@
 #define RICK_MIN 135
 #define JIM_MIN 132
 
+#define ALARM1
+#define ALARM2
+#define MELODY1
+#define MELODY2
+
+
+
 class Utils
 {
 public:
@@ -19,21 +26,21 @@ public:
 
     float convertInputToTemp_f(float&);
     int getFlameInput(int&);
-    void makeNoise(void);
+    void makeNoise(int);
     void handleFlameSensor(int&);
 
     bool noiseMade = false;
-    
+
     int calcValveSetpoint()
     {
         int retVal;
         float diff = (float) CurrentTempSetpoint_f - currentTemp_f;
-    
+
         if (diff < 2)
-            {valveSetpoint = JIM_MIN; 
+            {valveSetpoint = JIM_MIN;
               if (false == noiseMade)
-              {makeNoise(); noiseMade = true;}
-            }  
+              {makeNoise(1); noiseMade = true;}
+            }
         else if (diff < 4)
             {valveSetpoint = 180;}
         else if (diff < 7)
@@ -50,14 +57,6 @@ private:
     const int R1 = 10180;
     int incomingByte;
 
-
-
-    //float Vin = 4.9;                          // dave's notes
-    //float ADC_VoltPerCount = 4.9/1024.0;      // dave's notes
-    //Temp = 0.3626 * Rt + 101.33               // dave's notes
-    //y = -26.65ln(Rt) + 271.11                 // dave's notes
-
-    //y = 2.7552x - 279.15                      // dave's notes
 };
 
 

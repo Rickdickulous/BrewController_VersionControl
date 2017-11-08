@@ -1,7 +1,7 @@
 // Dick Bilt Libraries
 #include "Utils.h"
 #include "Display.h"
-#include "pitches.h"
+
 
 // display libraries
 #include "SPI.h"
@@ -53,7 +53,7 @@ void everythingTempControl()
     thermistorReading_Vcounts = analogRead(ThermistorPin);    // read the thermistor pin
     utils.convertInputToTemp_f(thermistorReading_Vcounts);
     // utils.currentTemp_f += 12;  // IMPORTANT! - Subtract 6 here to make temperature probe accurate at 155F.
-    
+
     //
     // get valve setpoint based on current probe temp
     //
@@ -62,7 +62,7 @@ void everythingTempControl()
     flameSensorReading_counts = analogRead(FlameSensorPin);
     utils.handleFlameSensor(flameSensorReading_counts);
 
-    
+
     // boil state: display current valve setpoint and allow changing of it on screen. multiples of 5? maybe have 150 200 255 on screen?
     // TODO: filter temperature readings
 
@@ -70,22 +70,22 @@ void everythingTempControl()
      *  (1) - Temp - have a BOIL input - temp to hit to start timer
      *  (2) - Time until next hop addition
      *  (3) - Display Output
-     *  
-     *  
+     *
+     *
      *  Have #define RICK and #define JIM to set min/max flame outputs
      */
 
     if (ValveSetpointOverride)
     {
       Serial.println("Overriding valve setpoint!");
-      utils.valveSetpoint = ValveSetpointOverride;  
+      utils.valveSetpoint = ValveSetpointOverride;
     }
     if (debug)
     {
       printDebug();
     }
     analogWrite(ValvePin, utils.valveSetpoint);  // set valve open amount
-    
+
     // delay(1000);
 }
 
@@ -95,7 +95,7 @@ void setup()
     pinMode(BuzzerPin, OUTPUT);
 
     disp.init(utils);
-    
+
     Serial.begin(9600);  // begin serial communication
 
     /*
@@ -107,11 +107,10 @@ void setup()
 
 void loop()
 {
-  everythingTempControl();
-  disp.printOnScreen(utils);
-  // tone(BuzzerPin,NOTE_D8,500);
-  delay(500);
-  // tone(BuzzerPin,NOTE_A7,500);
-  delay(1000);
+    everythingTempControl();
+    disp.printOnScreen(utils);
+    //disp.test();
+    delay(1000);
 }
-  
+
+

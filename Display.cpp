@@ -33,46 +33,90 @@
 #define GREENYELLOW 0xAFE5      /* 173, 255,  47 */
 #define PINK        0xF81F
 
+
 #define SCREEN_WIDTH_PIXELS 240
-# define SCREEN_HEIGHT_PIXELS 320
+#define SCREEN_HEIGHT_PIXELS 320
+
+
+int const Bg = DARKGREY;     // Background color
+int const Tc = GREENYELLOW;  // text color
+
+double prevActualTemp = 0.0;
 
 void Display::init(Utils& utils)
 {
 	  // Use hardware SPI (on Uno, #13, #12, #11) and the above for CS/DC
     tft.begin();
-    tft.fillScreen(DARKGREY);
+    tft.fillScreen(Bg);
+    tft.setTextColor(Tc);
+    tft.setTextSize(2);
+
+    // *** Display Target Temp *** 
+    tft.setCursor(0, 25);
+    tft.print("Target Temp: ");
+    tft.print(utils.CurrentTempSetpoint_f);
+
+    // *** Display Current Water Temp ***
+    tft.setCursor(0, 75);
+    tft.print("Actual Temp: ");
+
+    // *** Display Valve Setpoint ***
+    tft.setCursor(0, 125);
+    tft.print("Valve Setpoint = ");
+
     // drawSquare();
-    printOnScreen(utils);
 }
+
 
 void Display::drawSquare(void)
 {
-    // yield() may be necessary to prevent watchdog timeouts on blocking calls which cause hardware resets
-    tft.fillScreen(DARKGREY);
+    
     tft.fillRect(SCREEN_WIDTH_PIXELS/2, SCREEN_HEIGHT_PIXELS/2, 50, 75, YELLOW);
     tft.drawRect(SCREEN_WIDTH_PIXELS/4, SCREEN_HEIGHT_PIXELS/4, 20, 20, CYAN);  
 }
 
+
+void Display::test(void)
+{
+  while(1)
+  {
+    tft.setCursor(10,10);
+    tft.setTextColor(Tc);
+    tft.print("test");
+    delay(1000);
+    tft.setCursor(10,10);
+    tft.setTextColor(Bg);
+    tft.print("test");
+    delay(1000);
+    Serial.println("Round...");
+  }  
+}
+
+
 void Display::printOnScreen(Utils& utils)
 {
-  // *** Output setup *** 
-  tft.fillScreen(DARKGREY);
-  tft.setTextColor(GREENYELLOW);    
-  tft.setTextSize(2);
-  
-  // *** Display Target Temp *** 
-  tft.setCursor(0, 50);
-  tft.print("Target Temp: ");
-  tft.println(utils.CurrentTempSetpoint_f);
+    // *** Display Target Temp *** 
+    /*tft.setCursor(150, 50);
+    tft.setTextColor(Bg);
+    tft.println("     ");
+    tft.setTextColor(Tc);
+    tft.println(utils.CurrentTempSetpoint_f);*/
 
-  // *** Display Current Water Temp ***
-  tft.setCursor(0, 100);
-  tft.print("Actual Temp: ");
-  tft.println(utils.currentTemp_f);
+    // *** Display Current Water Temp ***
+    tft.setCursor(150, 75);
+    if (prevActualTemp != 0)
+    {
+        tft.setTextColor(Bg);
+        tft.print(prevActualTemp);
+    }
+    tft.setCursor(150, 75);
+    tft.setTextColor(Tc);
+    tft.print(utils.currentTemp_f);
+    prevActualTemp = utils.currentTemp_f;
 
-  // *** Display Valve Setpoint ***
-  tft.setCursor(0, 150);
-  tft.print("Valve Setpoint = ");
-  tft.println(utils.valveSetpoint);
-  
+
+
+    // *** Display Valve Setpoint ***
+    tft.setCursor(100, 150);
+    tft.println(utils.valveSetpoint);
 }
