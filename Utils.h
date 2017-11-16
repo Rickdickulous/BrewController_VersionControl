@@ -8,10 +8,10 @@
 #define RICK_MIN 135
 #define JIM_MIN 132
 
-#define ALARM1
-#define ALARM2
-#define MELODY1
-#define MELODY2
+#define ALARM1  1
+#define ALARM2  2
+#define MELODY1 3
+#define MELODY2 4
 
 
 

@@ -3,12 +3,6 @@
 #include "Display.h"
 
 
-// display libraries
-#include "SPI.h"
-#include "Adafruit_GFX.h"
-#include "Adafruit_ILI9341.h"
-
-
 Utils utils = Utils();
 Display disp = Display();
 

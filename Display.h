@@ -1,8 +1,11 @@
 #ifndef Display_h
 #define Display_h
 
+
 #include "Arduino.h"
+#include "Adafruit_GFX.h"  // Core Graphics Library
 #include "Adafruit_ILI9341.h"
+#include "Adafruit_FT6206.h"  // Capacitive Touch Library 
 #include "Utils.h"
 
 // For the Adafruit shield, these are the default.
