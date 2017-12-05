@@ -31,7 +31,7 @@ void printDebug(void)
     if (debug)
     {
       STR(utils.currentTemp_f);
-      STR(utils.CurrentTempSetpoint_f);
+      STR(utils.currentTempSetpoint_f);
       STR(utils.valveSetpoint);
     }
 }

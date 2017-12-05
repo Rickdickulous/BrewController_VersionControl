@@ -22,7 +22,7 @@ public:
 
     double currentTemp_f;
     int valveSetpoint;
-    int const CurrentTempSetpoint_f = 177;
+    int currentTempSetpoint_f = 177;
 
     float convertInputToTemp_f(float&);
     int getFlameInput(int&);
@@ -34,7 +34,7 @@ public:
     int calcValveSetpoint()
     {
         int retVal;
-        float diff = (float) CurrentTempSetpoint_f - currentTemp_f;
+        float diff = (float) currentTempSetpoint_f - currentTemp_f;
 
         if (diff < 2)
             {valveSetpoint = JIM_MIN;

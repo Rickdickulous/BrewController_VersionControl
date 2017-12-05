@@ -42,6 +42,8 @@ int const Bg = DARKGREY;     // Background color
 int const Tc = GREENYELLOW;  // text color
 
 double prevActualTemp = 0.0;
+int prevTempSetpoint = 0;
+int prevValveSetpoint = 0;
 
 void Display::init(Utils& utils)
 {
@@ -54,7 +56,6 @@ void Display::init(Utils& utils)
     // *** Display Target Temp *** 
     tft.setCursor(0, 25);
     tft.print("Target Temp: ");
-    tft.print(utils.CurrentTempSetpoint_f);
 
     // *** Display Current Water Temp ***
     tft.setCursor(0, 75);
@@ -62,9 +63,7 @@ void Display::init(Utils& utils)
 
     // *** Display Valve Setpoint ***
     tft.setCursor(0, 125);
-    tft.print("Valve Setpoint = ");
-
-    // drawSquare();
+    tft.print("Valve Setpoint: ");
 }
 
 
@@ -92,20 +91,29 @@ void Display::test(void)
   }  
 }
 
+int testNum = 1;
+int prevTestNum = 2;
 
 void Display::printOnScreen(Utils& utils)
 {
     // *** Display Target Temp *** 
-    /*tft.setCursor(150, 50);
-    tft.setTextColor(Bg);
-    tft.println("     ");
+    
+    if (prevTempSetpoint != 0)
+    {
+        tft.setCursor(150, 25);
+        tft.setTextColor(Bg);
+        tft.print(prevTempSetpoint);  
+    }
+    tft.setCursor(150, 25);
     tft.setTextColor(Tc);
-    tft.println(utils.CurrentTempSetpoint_f);*/
+    tft.print(utils.currentTempSetpoint_f);
+    prevTempSetpoint = utils.currentTempSetpoint_f;
 
     // *** Display Current Water Temp ***
-    tft.setCursor(150, 75);
+    
     if (prevActualTemp != 0)
     {
+        tft.setCursor(150, 75);
         tft.setTextColor(Bg);
         tft.print(prevActualTemp);
     }
@@ -114,9 +122,15 @@ void Display::printOnScreen(Utils& utils)
     tft.print(utils.currentTemp_f);
     prevActualTemp = utils.currentTemp_f;
 
-
-
     // *** Display Valve Setpoint ***
-    tft.setCursor(100, 150);
+    if (prevValveSetpoint != 0)
+    {
+        tft.setCursor(185, 125);
+        tft.setTextColor(Bg);
+        tft.print(prevValveSetpoint);
+    }
+    tft.setCursor(185, 125);
+    tft.setTextColor(Tc);
     tft.println(utils.valveSetpoint);
+    prevValveSetpoint = utils.valveSetpoint;
 }
