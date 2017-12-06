@@ -1,36 +1,103 @@
-#include "TempController.h"  // TODO: Update name to TempSensor
-#include "ValveControl.h"
+// Dick Bilt Libraries
 #include "Utils.h"
+#include "Display.h"
 
-int ThermistorPin = 0;
-int valvePin = 6;
-float Vcounts = 0.0;
-float currentTemp = 0.0;
-int valveSetpoint;
-int currentTempSetpoint_F = 90;
-int ticks_100ms = 0;
 
-TempController tempController = TempController();  // temperature control module
-ValveControl valveController = ValveControl();
+// display libraries
+#include "SPI.h"
+#include "Adafruit_GFX.h"
+
 Utils utils = Utils();
+Display disp = Display();
 
-void setVal(int setVal)
+
+// variable declarations
+float thermistorReading_Vcounts = 0.0;
+unsigned long ticks_100ms = 0;  // print using lu
+int flameSensorReading_counts = 1000;  // >900 means flame is on, so initialize to big number
+
+
+// Timing & Timers variables
+unsigned long const UpdateInterval = 1500;  // update flag set every 1000 ms
+unsigned long prevMillis = 0;
+unsigned long currentMillis = 0;
+
+
+// Pin Declarations
+int const ValvePin = 6;
+int const ThermistorPin = 0;
+int const BuzzerPin = 8;
+int const FlameSensorPin = 1;
+
+
+// ** Override valve open setpoint **
+int const ValveSetpointOverride = 0;  // Set to 0 to disable
+
+
+// debug log
+bool const debug = false;
+void printDebug(void)
 {
-   Serial.print("Valve set to ");
-   Serial.println(setVal);
-   analogWrite(valvePin, setVal);
-   delay(3000);  
+    if (debug)
+    {
+      STR(utils.currentTemp_f);
+      STR(utils.currentTempSetpoint_f);
+      STR(utils.valveSetpoint);
+    }
 }
 
 
-const bool debug = true;
+void everythingTempControl()
+{
+    // valveSetpoint = utils.getFlameInput(ticks_100ms);
 
-void setVal(int);
+    //
+    // get current probe temp degrees F
+    //
+    thermistorReading_Vcounts = analogRead(ThermistorPin);    // read the thermistor pin
+    utils.convertInputToTemp_f(thermistorReading_Vcounts);
+    // utils.currentTemp_f += 12;  // IMPORTANT! - Subtract 6 here to make temperature probe accurate at 155F.
+
+    //
+    // get valve setpoint based on current probe temp
+    //
+    utils.calcValveSetpoint();  // determines how big flame should be (analogWrite takes int)
+
+    flameSensorReading_counts = analogRead(FlameSensorPin);
+    utils.handleFlameSensor(flameSensorReading_counts);
+
+
+    // boil state: display current valve setpoint and allow changing of it on screen. multiples of 5? maybe have 150 200 255 on screen?
+    // TODO: filter temperature readings
+
+    /* take in rows of brew params:
+     *  (1) - Temp - have a BOIL input - temp to hit to start timer
+     *  (2) - Time until next hop addition
+     *  (3) - Display Output
+     *
+     *
+     *  Have #define RICK and #define JIM to set min/max flame outputs
+     */
+
+    if (ValveSetpointOverride)
+    {
+      Serial.println("Overriding valve setpoint!");
+      utils.valveSetpoint = ValveSetpointOverride;
+    }
+    if (debug)
+    {
+      printDebug();
+    }
+
+    analogWrite(ValvePin, utils.valveSetpoint);  // set valve open amount
+}
 
 void setup()
 {
+    pinMode(ValvePin, OUTPUT);
+    pinMode(BuzzerPin, OUTPUT);
 
-    pinMode(valvePin, OUTPUT);
+    disp.init(utils);
 
     Serial.begin(9600);  // begin serial communication
 
@@ -43,61 +110,16 @@ void setup()
 
 void loop()
 {
-    // valveSetpoint = utils.getFlameInput(&ticks_100ms);
-
-
-    Vcounts = analogRead(ThermistorPin);    // read the thermistor pin
-
-    //
-    // get current probe temp in degrees F
-    //
-
-    currentTemp = tempController.convertInputToTemp_F(Vcounts);
-    if (debug)
+    currentMillis = millis();
+    if ( (currentMillis - prevMillis) >= UpdateInterval)
     {
-      Serial.print("currentTemp (F) = ");
-      Serial.println(currentTemp);
+        everythingTempControl();  // must come before displaying!
+        disp.printOnScreen(utils);
+        
+        prevMillis = currentMillis;
     }
-    /*
-    setVal(100);
-    setVal(125);
-    setVal(150);
-    setVal(175);
-    setVal(200);    
-    setVal(225);
-    setVal(250);
-    */
-    analogWrite(valvePin, 200);
-    /*
-    // Loop over valve control output settings
-    for (int i = 80; i < 150; i+= 5)
-    {
-      analogWrite(valvePin, i);
-      if (debug)
-      {
-        Serial.print("Valve = ");
-        Serial.println(i);
-      }
-    }  
-      */
-      delay(1000);  
     
-    
-
-    //
-    // get valve setpoint based on current probe temp
-    //
-
-    /*
-    valveSetpoint = valveController.calcSetpoint(currentTemp, currentTempSetpoint_F);  // determines how big flame should be (analogWrite takes int)
-
-    if (debug)
-    {
-      Serial.print("valveSetpoint = ");
-      Serial.println(valveSetpoint);
-    }
-   // set valve open amount
-    analogWrite(valvePin, valveSetpoint);
-    */
-
+    disp.touchControl(utils);
 }
+
+
