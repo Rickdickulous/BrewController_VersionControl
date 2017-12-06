@@ -8,10 +8,10 @@
 #define RICK_MIN 135
 #define JIM_MIN 132
 
-#define ALARM1  1
-#define ALARM2  2
-#define MELODY1 3
-#define MELODY2 4
+#define ALARM1
+#define ALARM2
+#define MELODY1
+#define MELODY2
 
 
 
@@ -22,7 +22,7 @@ public:
 
     double currentTemp_f;
     int valveSetpoint;
-    int currentTempSetpoint_f = 177;
+    int currentTempSetpoint_f = 150;
 
     float convertInputToTemp_f(float&);
     int getFlameInput(int&);
@@ -56,7 +56,6 @@ private:
     float Rt = 0.0;
     const int R1 = 10180;
     int incomingByte;
-
 };
 
 

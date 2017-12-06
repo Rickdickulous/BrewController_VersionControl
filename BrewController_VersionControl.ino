@@ -3,6 +3,10 @@
 #include "Display.h"
 
 
+// display libraries
+#include "SPI.h"
+#include "Adafruit_GFX.h"
+
 Utils utils = Utils();
 Display disp = Display();
 
@@ -11,6 +15,12 @@ Display disp = Display();
 float thermistorReading_Vcounts = 0.0;
 unsigned long ticks_100ms = 0;  // print using lu
 int flameSensorReading_counts = 1000;  // >900 means flame is on, so initialize to big number
+
+
+// Timing & Timers variables
+unsigned long const UpdateInterval = 1500;  // update flag set every 1000 ms
+unsigned long prevMillis = 0;
+unsigned long currentMillis = 0;
 
 
 // Pin Declarations
@@ -25,7 +35,7 @@ int const ValveSetpointOverride = 0;  // Set to 0 to disable
 
 
 // debug log
-const bool debug = true;
+bool const debug = false;
 void printDebug(void)
 {
     if (debug)
@@ -78,9 +88,8 @@ void everythingTempControl()
     {
       printDebug();
     }
-    analogWrite(ValvePin, utils.valveSetpoint);  // set valve open amount
 
-    // delay(1000);
+    analogWrite(ValvePin, utils.valveSetpoint);  // set valve open amount
 }
 
 void setup()
@@ -101,10 +110,16 @@ void setup()
 
 void loop()
 {
-    everythingTempControl();
-    disp.printOnScreen(utils);
-    //disp.test();
-    delay(1000);
+    currentMillis = millis();
+    if ( (currentMillis - prevMillis) >= UpdateInterval)
+    {
+        everythingTempControl();  // must come before displaying!
+        disp.printOnScreen(utils);
+        
+        prevMillis = currentMillis;
+    }
+    
+    disp.touchControl(utils);
 }
 
 

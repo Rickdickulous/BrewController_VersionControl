@@ -44,11 +44,11 @@ void Utils::handleFlameSensor(int& flameSensorInput)
 {
   if (flameSensorInput > 900)
   {
-    Serial.println("NO FLAME, WAYNE!");
+    //Serial.println("NO FLAME, WAYNE!");
   }
   else
   {
-    Serial.println("FLAME ON, GARTH!");
+    //Serial.println("FLAME ON, GARTH!");
   }
 }
 
