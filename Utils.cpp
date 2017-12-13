@@ -3,42 +3,25 @@
 extern bool debug;
 
 
-float Utils::convertInputToTemp_f(float& thermistorReading_counts)
+float Utils::convertInputToTemp_f(int& thermistorReading_counts)
 {
-    Rt = R1 / (1024/thermistorReading_counts - 1);  // cast thermistorReading_counts to float to prevent rounding errors
+    Rt = R1 / (1024/(float)thermistorReading_counts - 1);  // cast thermistorReading_counts to float to prevent rounding errors
     float temp_C = (-26.65) * log(Rt) + 271.11;
-    currentTemp_f = temp_C * 1.8 + 32;
+    return temp_C * 1.8 + 32;
 }
 
 
-int Utils::getFlameInput(int& ticks)
+void Utils::calcProbeTemp(void)
 {
-    int retVal = 0;
-    incomingByte = 0;
-    if (debug)
+    int sum = 0;
+    for (int i=0; i<ThermistorBufferSize; i++)
     {
-        Serial.print("ticks = ");
-        Serial.println(ticks);
+        sum += thermistorBuffer[i];
     }
 
-    Serial.println("Enter integer between 100 - 255 to set flame output:");
-    while (Serial.available() == 0) {}
-
-    while( Serial.available() > 0 )
-    {
-        incomingByte += Serial.read();
-    }    // stays here until 1 or more bytes are pushed to the receive buffer
-
-    if (incomingByte > 0)
-    {
-        Serial.print("Received: ");
-        Serial.println(incomingByte);
-    }
-
-    // TODO: Enter a - z for flame level. a = 100, z = 250
-
-    ticks += 100;
+    currentTemp_f = convertInputToTemp_f(sum);
 }
+
 
 void Utils::handleFlameSensor(int& flameSensorInput)
 {
@@ -51,6 +34,7 @@ void Utils::handleFlameSensor(int& flameSensorInput)
     //Serial.println("FLAME ON, GARTH!");
   }
 }
+
 
 void Utils::makeNoise(int selector)
 {
@@ -69,21 +53,3 @@ void Utils::makeNoise(int selector)
         }  // case 1
     }  // switch(selector)
 }
-
-
-
-
-/*
-float TempController::convertInputToTemp_C(float Vcounts)
-{
-    Rt = R1 / (1024/Vcounts - 1);
-    float temp_C = (-26.65) * log(Rt) + 271.11;
-    return temp_C;
-}
-
-
-float TempController::cToF(float temp_c)
-{
-    return temp_c * 1.8 + 32;
-}
-*/

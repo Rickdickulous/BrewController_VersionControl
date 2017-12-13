@@ -13,12 +13,13 @@ Display disp = Display();
 
 // variable declarations
 float thermistorReading_Vcounts = 0.0;
-unsigned long ticks_100ms = 0;  // print using lu
+int thermistorBufferIndex = 0;
 int flameSensorReading_counts = 1000;  // >900 means flame is on, so initialize to big number
 
 
 // Timing & Timers variables
-unsigned long const UpdateInterval = 1500;  // update flag set every 1000 ms
+unsigned int const UpdateInterval_long = 1500;
+unsigned int const UpdateInterval_short = 100;
 unsigned long prevMillis = 0;
 unsigned long currentMillis = 0;
 
@@ -35,7 +36,7 @@ int const ValveSetpointOverride = 0;  // Set to 0 to disable
 
 
 // debug log
-bool const debug = false;
+bool const debug = true;
 void printDebug(void)
 {
     if (debug)
@@ -47,15 +48,24 @@ void printDebug(void)
 }
 
 
-void everythingTempControl()
+void cacheThermistorReadings()
 {
-    // valveSetpoint = utils.getFlameInput(ticks_100ms);
+    if (thermistorBufferIndex == (utils.ThermistorBufferSize - 1) )
+    { 
+        thermistorBufferIndex = 0;
+    }
 
-    //
-    // get current probe temp degrees F
-    //
     thermistorReading_Vcounts = analogRead(ThermistorPin);    // read the thermistor pin
-    utils.convertInputToTemp_f(thermistorReading_Vcounts);
+    utils.thermistorBuffer[thermistorBufferIndex] = thermistorReading_Vcounts;
+
+    thermistorBufferIndex++;
+}
+
+void everythingTempControl()
+{ 
+    // get current probe temp degrees F
+    utils.calcProbeTemp();
+    
     // utils.currentTemp_f += 12;  // IMPORTANT! - Subtract 6 here to make temperature probe accurate at 155F.
 
     //
@@ -65,19 +75,6 @@ void everythingTempControl()
 
     flameSensorReading_counts = analogRead(FlameSensorPin);
     utils.handleFlameSensor(flameSensorReading_counts);
-
-
-    // boil state: display current valve setpoint and allow changing of it on screen. multiples of 5? maybe have 150 200 255 on screen?
-    // TODO: filter temperature readings
-
-    /* take in rows of brew params:
-     *  (1) - Temp - have a BOIL input - temp to hit to start timer
-     *  (2) - Time until next hop addition
-     *  (3) - Display Output
-     *
-     *
-     *  Have #define RICK and #define JIM to set min/max flame outputs
-     */
 
     if (ValveSetpointOverride)
     {
@@ -100,21 +97,20 @@ void setup()
     disp.init(utils);
 
     Serial.begin(9600);  // begin serial communication
-
-    /*
-    Serial.println("Hit a key to start");
-    while( Serial.available() == 0 ) {}  // stays here until 1 or more bytes are pushed to the receive buffer
-    Serial.flush();  // waits for data to finishing transmitting to the serial buffer before moving on
-    */
 }
 
 void loop()
 {
     currentMillis = millis();
-    if ( (currentMillis - prevMillis) >= UpdateInterval)
+    if ( (currentMillis - prevMillis) >= UpdateInterval_short )
     {
-        everythingTempControl();  // must come before displaying!
-        disp.printOnScreen(utils);
+        cacheThermistorReadings();
+        
+        if ( (currentMillis - prevMillis) >= UpdateInterval_long )
+        {
+            everythingTempControl();  // must come before displaying!
+            disp.printOnScreen(utils);  
+        }
         
         prevMillis = currentMillis;
     }
