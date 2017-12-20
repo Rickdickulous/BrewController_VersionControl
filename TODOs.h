@@ -1,10 +1,12 @@
 /*
  * CODE:
- * 1. buffer & average temperature readings
  * 
- * 2. Move debug flag into utils so it can be used everywhere
+ * +++ Display actual temp as XX.Y instead of XX.YY. Then can look at target temp, actual temp, and valve setpoint.
+ *     If none have changed since the last time display was updated, then don't update display.
  * 
- * 3. PID control flame
+ * +++ Move debug flag into utils so it can be used everywhere
+ * 
+ * +++ PID control flame
  * 
  * 
  * OTHER:

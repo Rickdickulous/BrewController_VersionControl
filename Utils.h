@@ -8,11 +8,10 @@
 #define RICK_MIN 135
 #define JIM_MIN 132
 
-#define ALARM1
-#define ALARM2
-#define MELODY1
-#define MELODY2
-
+#define VALVE_PIN 6
+#define THERMISTOR_PIN 0
+#define FLAME_SENSOR_PIN 1
+#define BUZZER_PIN 8
 
 
 class Utils
@@ -22,14 +21,13 @@ public:
 
     double currentTemp_f;
     int valveSetpoint;
-    static int const ThermistorBufferSize = 10;
+    static int const ThermistorBufferSize = 20;
     int currentTempSetpoint_f = 150;
     int thermistorBuffer[ThermistorBufferSize];  // circular buffer for thermistor readings
 
-    float convertInputToTemp_f(int&);  // TODO: Check that this is ok accepting an int
     void calcProbeTemp(void);
     void makeNoise(int);
-    void handleFlameSensor(int&);
+    void handleFlameSensor(void);
 
     bool noiseMade = false;
 
@@ -40,8 +38,8 @@ public:
 
         if (diff < 1.25)
             {valveSetpoint = JIM_MIN;
-              if (false == noiseMade)
-              {makeNoise(1); noiseMade = true;}
+              //if (false == noiseMade)
+              //{makeNoise(1); noiseMade = true;}
             }
         else if (diff < 2)
             {valveSetpoint = 145;}
@@ -59,9 +57,7 @@ public:
 
     ~Utils(){};
 private:
-    float Rt = 0.0;
-    const int R1 = 10180;
-    int incomingByte;
+
 };
 
 

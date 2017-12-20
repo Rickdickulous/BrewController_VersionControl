@@ -3,28 +3,26 @@
 extern bool debug;
 
 
-float Utils::convertInputToTemp_f(int& thermistorReading_counts)
-{
-    Rt = R1 / (1024/(float)thermistorReading_counts - 1);  // cast thermistorReading_counts to float to prevent rounding errors
-    float temp_C = (-26.65) * log(Rt) + 271.11;
-    return temp_C * 1.8 + 32;
-}
-
-
 void Utils::calcProbeTemp(void)
 {
-    int sum = 0;
+    // Get Average
+    float sum = 0;
     for (int i=0; i<ThermistorBufferSize; i++)
     {
         sum += thermistorBuffer[i];
     }
+    float avg = sum/ThermistorBufferSize;
 
-    currentTemp_f = convertInputToTemp_f(sum);
+    // convert to degrees F
+    float Rt = 10180 / (1024/avg - 1);  // cast thermistorReading_counts to float to prevent rounding errors
+    float temp_C = (-26.65) * log(Rt) + 271.11;
+    currentTemp_f = temp_C * 1.8 + 32;
 }
 
 
-void Utils::handleFlameSensor(int& flameSensorInput)
+void Utils::handleFlameSensor(void)
 {
+    int flameSensorInput = analogRead(FLAME_SENSOR_PIN);
   if (flameSensorInput > 900)
   {
     //Serial.println("NO FLAME, WAYNE!");
@@ -47,7 +45,7 @@ void Utils::makeNoise(int selector)
             for (int thisNote = 0; thisNote < 8; thisNote++)
             {
               // pin8 output the voice, every scale is 0.5 sencond
-              tone(8, melody[thisNote], 500);
+              tone(BUZZER_PIN, melody[thisNote], 500);
               delay(500);
             }
         }  // case 1
