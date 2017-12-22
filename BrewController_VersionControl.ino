@@ -12,7 +12,6 @@ Display disp = Display();
 
 
 // variable declarations
-int thermistorReading_Vcounts = 0.0;
 int thermistorBufferIndex = 0;
 
 
@@ -44,7 +43,7 @@ void cacheThermistorReadings()
         thermistorBufferIndex = 0;
     }
 
-    thermistorReading_Vcounts = analogRead(THERMISTOR_PIN);    // read the thermistor pin
+    int thermistorReading_Vcounts = analogRead(THERMISTOR_PIN);    // read the thermistor pin
     utils.thermistorBuffer[thermistorBufferIndex] = thermistorReading_Vcounts;
 
     thermistorBufferIndex++;
@@ -100,12 +99,10 @@ void loop()
             {
                 printDebug();
             }
-
             prevMillis_long = currentMillis;
-        }
-        
+        }  // long
         prevMillis_short = currentMillis;
-    }
+    }  // short
     
     disp.touchControl(utils);
 }
