@@ -1,6 +1,14 @@
 #include "Utils.h"
 
-extern bool debug;
+void Utils::printDebug(void)
+{
+    if (debug)
+    {
+      STR(currentTemp_f);
+      STR(currentTempSetpoint_f);
+      STR(valveSetpoint);
+    }
+}
 
 
 void Utils::calcProbeTemp(void)
@@ -31,6 +39,36 @@ void Utils::handleFlameSensor(void)
   {
     //Serial.println("FLAME ON, GARTH!");
   }
+}
+
+
+void Utils::cacheThermistorReadings()
+{
+    if (thermistorBufferIndex == (ThermistorBufferSize - 1) )
+    { 
+        thermistorBufferIndex = 0;
+    }
+
+    int thermistorReading_Vcounts = analogRead(THERMISTOR_PIN);    // read the thermistor pin
+    thermistorBuffer[thermistorBufferIndex] = thermistorReading_Vcounts;
+
+    thermistorBufferIndex++;
+}
+
+
+void Utils::everythingTempControl()
+{ 
+    // get current probe temp degrees F
+    calcProbeTemp();
+    
+    //
+    // get valve setpoint based on current probe temp
+    //
+    calcValveSetpoint();  // determines how big flame should be (analogWrite takes int)
+
+    
+
+    analogWrite(VALVE_PIN, valveSetpoint);  // set valve open amount
 }
 
 

@@ -13,12 +13,25 @@
 #define FLAME_SENSOR_PIN 1
 #define BUZZER_PIN 8
 
+enum States {
+    INIT,
+    PRE_MASH,
+    MASH,
+    PRE_BOIL,
+    BOIL
+};
+
 
 class Utils
 {
 public:
     Utils(){};
 
+    int currentState;
+    int prevState;
+
+    bool const debug = true;
+    int thermistorBufferIndex = 0;
     double currentTemp_f;
     int valveSetpoint;
     static int const ThermistorBufferSize = 20;
@@ -28,6 +41,9 @@ public:
     void calcProbeTemp(void);
     void makeNoise(int);
     void handleFlameSensor(void);
+    void cacheThermistorReadings();
+    void everythingTempControl();
+    void printDebug();
 
     bool noiseMade = false;
 
