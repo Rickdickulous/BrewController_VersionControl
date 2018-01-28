@@ -10,6 +10,9 @@ unsigned long currentMillis = 0;
 
 
 void Interface::init() {
+    BrewState * bs = static_cast<BrewState*>(StateMap[utils.currentState]);
+    bs->dispInit();
+  
     disp.init();
     disp.initState(utils);
     
@@ -29,6 +32,8 @@ void Interface::brewsistantManager() {
 
 void Interface::manageTimedServices() {
     currentMillis = millis();
+    BrewState * bs = static_cast<BrewState*>(StateMap[utils.currentState]);
+    
     if ( (currentMillis - prevMillis_short) >= UpdateInterval_short )
     {
         utils.cacheThermistorReadings();
@@ -37,7 +42,10 @@ void Interface::manageTimedServices() {
         if ( (currentMillis - prevMillis_long) >= UpdateInterval_long )
         {
             utils.everythingTempControl();  // must come before displaying!
-            disp.printOnScreen(utils);
+
+            bs->dispUpdate();
+
+            //disp.printOnScreen(utils);
 
             if (utils.debug)
             {
@@ -47,7 +55,11 @@ void Interface::manageTimedServices() {
         }  // long
         prevMillis_short = currentMillis;
     }  // short
-    
-    disp.touchControl(utils);  
+
+    if ( bs->touchControl() ) {
+        bs->dispUpdate();
+        delay(100);
+    }
+    // disp.touchControl(utils);  
 }
 

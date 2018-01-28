@@ -7,6 +7,9 @@
 #include "Adafruit_FT6206.h"    // Touch Display Libraries
 
 
+#define SCREEN_WIDTH_PIXELS 240
+#define SCREEN_HEIGHT_PIXELS 320
+
 // For the Adafruit shield, these are the default.
 #define TFT_DC 9
 #define TFT_CS 10
@@ -37,6 +40,11 @@
 #define ORANGE      0xFD20      /* 255, 165,   0 */
 #define GREENYELLOW 0xAFE5      /* 173, 255,  47 */
 #define PINK        0xF81F
+
+
+int const Bg = DARKGREY;     // Background color
+int const Tc = GREENYELLOW;  // text color
+
 
 class Display
 {

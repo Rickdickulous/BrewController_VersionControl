@@ -4,7 +4,8 @@
 #include "Arduino.h"
 #include "Display.h"
 #include "Utils.h"
-#include "global.h"
+#include "BrewStates.h"
+
 
 class Interface
 {
@@ -13,15 +14,20 @@ public:
     void init();
 
     void brewsistantManager();
-
     void manageTimedServices();
 
     Utils utils = Utils();
     Display disp = Display();
-    
-    
-};
 
+   PreMash preMashState = PreMash();
+   Mash mashState = Mash();
+
+private:
+    void * StateMap[MAX_STATES] = { &preMashState,
+                                    &mashState
+                                  };
+
+};
 
 
 

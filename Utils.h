@@ -16,8 +16,9 @@
 enum States {
     PRE_MASH,
     MASH,
-    PRE_BOIL,
-    BOIL
+    //PRE_BOIL,
+    //BOIL
+    MAX_STATES
 };
 
 
@@ -35,7 +36,11 @@ private:
 class Utils
 {
 public:
-    Utils(){};
+    Utils(){ 
+      currentState = PRE_MASH;
+      prevState = PRE_MASH;
+      // currentTemp = tempController.getCurrentTemp();  <- have this initialized before Utils.
+    };
 
     Timer primaryTimer = Timer(30);
     Timer secondaryTimer = Timer(0);
