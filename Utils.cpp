@@ -1,14 +1,17 @@
 #include "Utils.h"
 
-void Utils::printDebug(void)
-{
-    if (debug)
-    {
+void Utils::printDebug(void) {
+    if (debug) {
       STR(currentTemp_f);
       STR(currentTempSetpoint_f);
       STR(valveSetpoint);
     }
 }
+
+
+void Utils::init() {
+    
+} 
 
 
 void Utils::calcProbeTemp(void)
@@ -89,3 +92,15 @@ void Utils::makeNoise(int selector)
         }  // case 1
     }  // switch(selector)
 }
+
+Timer::Timer(int mins) : _duration_sec(mins*60) {}
+
+void Timer::decrementSecond() {
+    _duration_sec--;
+}
+
+
+int Timer::getRemainingTime() {
+    return _duration_sec;
+}
+

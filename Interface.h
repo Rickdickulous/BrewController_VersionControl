@@ -4,6 +4,7 @@
 #include "Arduino.h"
 #include "Display.h"
 #include "Utils.h"
+#include "global.h"
 
 class Interface
 {

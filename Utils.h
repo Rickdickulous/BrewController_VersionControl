@@ -14,7 +14,6 @@
 #define BUZZER_PIN 8
 
 enum States {
-    INIT,
     PRE_MASH,
     MASH,
     PRE_BOIL,
@@ -22,10 +21,24 @@ enum States {
 };
 
 
+class Timer {
+public:
+    Timer(int minutes);
+    void decrementSecond();
+    int getRemainingTime();
+
+private:
+    int _duration_sec;
+};
+
+
 class Utils
 {
 public:
     Utils(){};
+
+    Timer primaryTimer = Timer(30);
+    Timer secondaryTimer = Timer(0);
 
     int currentState;
     int prevState;
@@ -38,6 +51,7 @@ public:
     int currentTempSetpoint_f = 150;
     int thermistorBuffer[ThermistorBufferSize];  // circular buffer for thermistor readings
 
+    void init();
     void calcProbeTemp(void);
     void makeNoise(int);
     void handleFlameSensor(void);
@@ -76,5 +90,7 @@ private:
 
 };
 
+extern Utils utils;  // ! This is an important trick. This allocates a global variable called utils that when 
+                     // instantiated is accesible throughout the program
 
 #endif // Utils_h

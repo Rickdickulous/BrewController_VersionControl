@@ -8,7 +8,7 @@
 #define GREEN    0x07E0
 #define CYAN     0x07FF
 #define MAGENTA  0xF81F
-#define YELLOW   0xFFE0 
+#define YELLOW   0xFFE0
 #define WHITE    0xFFFF
 */
 
@@ -25,89 +25,236 @@ int const Tc = GREENYELLOW;  // text color
 double prevActualTemp = 0.0;
 int prevTempSetpoint = 0;
 int prevValveSetpoint = 0;
+long prevPrimaryTimer = 0;
 
-void Display::init(Utils& utils)
-{
-	  // Use hardware SPI (on Uno, #13, #12, #11) and the above for CS/DC
+
+void Display::init() {
     tft.begin();
     tft.fillScreen(Bg);
-    tft.setTextColor(Tc);
-    tft.setTextSize(2);
-
-    // *** Display Target Temp *** 
-    tft.setCursor(0, 25);
-    tft.print("Target Temp: ");
-
-    // *** Display Current Water Temp ***
-    tft.setCursor(0, 75);
-    tft.print("Actual Temp: ");
-
-    // *** Display Valve Setpoint ***
-    tft.setCursor(0, 125);
-    tft.print("Valve Setpoint: ");
-
-    tft.drawRect(30, 175, 75, 100, BLACK);
-    tft.drawRect(140, 175, 75, 100, BLACK);
-
-    tft.setCursor(60, 210);
-    tft.setTextColor(BLUE);
-    tft.setTextSize(3);
-    tft.print("-");
-
-    tft.setCursor(170, 210);
-    tft.setTextColor(RED);
-    tft.print("+");
     
-
-
     // *** Capacitive Touch Setup ***
     if(!ctp.begin())
     {
         Serial.println("Unable to initialize ctp!");
+        tft.print("Cap Touch Init Failed!");
     }
 
-    tft.setTextSize(2);  // reset text size for live updates
 }
 
-void Display::printOnScreen(Utils& utils)
-{
-    // *** Display Target Temp *** 
-    
-    if (prevTempSetpoint != 0)
-    {
-        tft.setCursor(150, 25);
-        tft.setTextColor(Bg);
-        tft.print(prevTempSetpoint);  
-    }
-    tft.setCursor(150, 25);
-    tft.setTextColor(Tc);
-    tft.print(utils.currentTempSetpoint_f);
-    prevTempSetpoint = utils.currentTempSetpoint_f;
 
-    // *** Display Current Water Temp ***
-    
-    if (prevActualTemp != 0)
-    {
-        tft.setCursor(150, 75);
-        tft.setTextColor(Bg);
-        tft.print(prevActualTemp);
-    }
-    tft.setCursor(150, 75);
-    tft.setTextColor(Tc);
-    tft.print(utils.currentTemp_f);
-    prevActualTemp = utils.currentTemp_f;
+void Display::initState(Utils& utils) {
+    switch (utils.currentState) {
+        case PRE_MASH: {
+            // Use hardware SPI (on Uno, #13, #12, #11) and the above for CS/DC
+            tft.setTextColor(Tc);
+            tft.setTextSize(2);
 
-    // *** Display Valve Setpoint ***
-    if (prevValveSetpoint != 0)
-    {
-        tft.setCursor(185, 125);
-        tft.setTextColor(Bg);
-        tft.print(prevValveSetpoint);
+            tft.setCursor(5, 25);
+            tft.print("Mash Temp: ");
+
+            // drawRect(x, y, width, height)
+            // minus
+            tft.drawRect(30, 50, 80, 60, BLACK);
+             tft.setCursor(55, 70);
+            tft.setTextColor(BLUE);
+            tft.setTextSize(3);
+            tft.print("-");
+
+            // plus
+            tft.drawRect(140, 50, 80, 60, BLACK);
+             tft.setCursor(170, 70);
+            tft.setTextColor(RED);
+            tft.print("+");
+
+            // ============= Mash Time =============
+          
+            tft.setCursor(5, 125);
+            tft.setTextColor(Tc);
+            tft.setTextSize(2);
+            tft.print("Mash Time: ");
+
+            // minus
+            tft.drawRect(30, 150, 80, 60, BLACK);
+            tft.setCursor(55, 170);
+            tft.setTextColor(BLUE);
+            tft.setTextSize(3);
+            tft.print("-");
+
+            // plus
+            tft.drawRect(140, 150, 80, 60, BLACK);
+            tft.setCursor(170, 170);
+            tft.setTextColor(RED);
+            tft.print("+");
+
+            // ============== BEGIN =============
+            tft.drawRect(30, 230, 160, 70, BLACK);
+            tft.setCursor(90, 275);
+            tft.setTextSize(2);
+            tft.setTextColor(YELLOW);
+            tft.print("BEGIN");
+            
+            
+
+            /*
+            // *** Display Current Water Temp ***
+            tft.setCursor(0, 75);
+            tft.print("Actual Temp: ");
+
+            // *** Display Valve Setpoint ***
+            tft.setCursor(0, 125);
+            tft.print("Valve Setpoint: ");
+
+            tft.drawRect(30, 175, 75, 100, BLACK);
+            tft.drawRect(140, 175, 75, 100, BLACK);
+
+            tft.setCursor(60, 210);
+            tft.setTextColor(BLUE);
+            tft.setTextSize(3);
+            tft.print("-");
+
+            tft.setCursor(170, 210);
+            tft.setTextColor(RED);
+            tft.print("+");
+            */
+            tft.setTextSize(2);  // reset text size for live updates
+            break;
+        }  // case: PRE_MASH
+
+        case MASH: {
+            tft.setTextColor(Tc);
+            tft.setTextSize(2);
+
+            // *** Display Target Temp ***
+            tft.setCursor(0, 25);
+            tft.print("Target Temp: ");
+
+            // *** Display Current Water Temp ***
+            tft.setCursor(0, 75);
+            tft.print("Actual Temp: ");
+
+            // *** Display Valve Setpoint ***
+            tft.setCursor(0, 125);
+            tft.print("Valve Setpoint: ");
+
+            tft.drawRect(30, 175, 75, 100, BLACK);
+            tft.drawRect(140, 175, 75, 100, BLACK);
+
+            tft.setCursor(60, 210);
+            tft.setTextColor(BLUE);
+            tft.setTextSize(3);
+            tft.print("-");
+
+            tft.setCursor(170, 210);
+            tft.setTextColor(RED);
+            tft.print("+");
+
+            // tft.setTextSize(2);  // reset text size for live updates  // TBD: Is this necessary?
+
+            break;
+        }
+
+
     }
-    tft.setCursor(185, 125);
-    tft.setTextColor(Tc);
-    tft.println(utils.valveSetpoint);
-    prevValveSetpoint = utils.valveSetpoint;
+
+}
+
+void Display::printOnScreen(Utils& utils) {
+    switch (utils.currentState) {
+      
+        case PRE_MASH: {
+            // *** Display Target Temp ***
+            if (prevTempSetpoint != 0)
+            {
+                tft.setCursor(150, 25);
+                tft.setTextColor(Bg);
+                tft.print(prevTempSetpoint);
+            }
+            tft.setCursor(150, 25);
+            tft.setTextColor(Tc);
+            tft.print(utils.currentTempSetpoint_f);
+            prevTempSetpoint = utils.currentTempSetpoint_f;
+
+            if (prevPrimaryTimer != 0)
+            {
+                tft.setCursor(150, 75);
+                tft.setTextColor(Bg);
+                tft.print(prevPrimaryTimer);
+            }
+            tft.setCursor(150, 125);
+            tft.setTextColor(Tc);
+            tft.print(utils.primaryTimer.getRemainingTime());
+            prevPrimaryTimer = utils.primaryTimer.getRemainingTime();
+            /*
+            // *** Display Current Water Temp ***
+            if (prevActualTemp != 0)
+            {
+                tft.setCursor(150, 75);
+                tft.setTextColor(Bg);
+                tft.print(prevActualTemp);
+            }
+            tft.setCursor(150, 75);
+            tft.setTextColor(Tc);
+            tft.print(utils.currentTemp_f);
+            prevActualTemp = utils.currentTemp_f;
+
+            // *** Display Valve Setpoint ***
+            if (prevValveSetpoint != 0)
+            {
+                tft.setCursor(185, 125);
+                tft.setTextColor(Bg);
+                tft.print(prevValveSetpoint);
+            }
+
+            tft.setCursor(185, 125);
+            tft.setTextColor(Tc);
+            tft.println(utils.valveSetpoint);
+            prevValveSetpoint = utils.valveSetpoint;
+            */
+            break;
+        }  // case: PRE_MASH
+        
+        case MASH: {
+            // *** Display Target Temp ***
+            if (prevTempSetpoint != 0)
+            {
+                tft.setCursor(150, 25);
+                tft.setTextColor(Bg);
+                tft.print(prevTempSetpoint);
+            }
+            tft.setCursor(150, 25);
+            tft.setTextColor(Tc);
+            tft.print(utils.currentTempSetpoint_f);
+            prevTempSetpoint = utils.currentTempSetpoint_f;
+
+            // *** Display Current Water Temp ***
+            if (prevActualTemp != 0)
+            {
+                tft.setCursor(150, 75);
+                tft.setTextColor(Bg);
+                tft.print(prevActualTemp);
+            }
+            tft.setCursor(150, 75);
+            tft.setTextColor(Tc);
+            tft.print(utils.currentTemp_f);
+            prevActualTemp = utils.currentTemp_f;
+
+            // *** Display Valve Setpoint ***
+            if (prevValveSetpoint != 0)
+            {
+                tft.setCursor(185, 125);
+                tft.setTextColor(Bg);
+                tft.print(prevValveSetpoint);
+            }
+
+            tft.setCursor(185, 125);
+            tft.setTextColor(Tc);
+            tft.println(utils.valveSetpoint);
+            prevValveSetpoint = utils.valveSetpoint;
+
+            break;
+        }  // MASH
+
+    }
 }
 
 void Display::touchControl(Utils& utils)
@@ -128,26 +275,33 @@ void Display::touchControl(Utils& utils)
     Serial.print("p.y = ");
     Serial.println(p.y);
 
+    switch (utils.currentState) {
+        case PRE_MASH: {
+
+          break;
+        }
+    }
+
     // is button press within +/- button y range?
     if ( 165 <= p.y <= 265 )
     {
         // yes! Based on x value, is it an up or down press?
         if ( (30 <= p.x) && ( p.x <= 90) )
         {
-            utils.currentTempSetpoint_f--;  
+            utils.currentTempSetpoint_f--;
         }
         else if ( (130 <= p.x) && (p.x <= 210) )
         {
-            utils.currentTempSetpoint_f++;  
+            utils.currentTempSetpoint_f++;
         }
 
         // update display after button press
         printOnScreen(utils);
         delay(100);
-        
+
     }
     else
     {
         return;
-    }    
+    }
 }

@@ -10,12 +10,21 @@ unsigned long currentMillis = 0;
 
 
 void Interface::init() {
-    disp.init(utils);
+    disp.init();
+    disp.initState(utils);
+    
+    utils.currentState = PRE_MASH;
+    utils.init();
 }
 
 
 void Interface::brewsistantManager() {
     manageTimedServices();
+    
+    if (utils.currentState != utils.prevState)
+    {
+        disp.initState(utils);  
+    }
 }
 
 void Interface::manageTimedServices() {

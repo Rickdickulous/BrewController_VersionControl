@@ -46,11 +46,15 @@ public:
 
     Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
     Adafruit_FT6206 ctp = Adafruit_FT6206();
-	  void init(Utils&);
+    void init();
+	  void initState(Utils&);
     void printOnScreen(Utils&);
     void touchControl(Utils&);
 
 	~Display(){};
 };
+
+extern Display disp;  // ! Important trick here - this statement makes a global object disp that when
+                      //   instantiated is accessible throughout the program
 
 #endif // Display_h
