@@ -3,16 +3,19 @@
 
 #include "Utils.h"
 #include "Arduino.h"            // Core Display Libraries
+
+// For the Adafruit shield, these are the default.
+#define TFT_DC 9
+#define TFT_CS 10
 #include "Adafruit_ILI9341.h"   // Core Display Libraries
 #include "Adafruit_FT6206.h"    // Touch Display Libraries
+
 
 
 #define SCREEN_WIDTH_PIXELS 240
 #define SCREEN_HEIGHT_PIXELS 320
 
-// For the Adafruit shield, these are the default.
-#define TFT_DC 9
-#define TFT_CS 10
+
 
 // Touch screen adjusted min and max, x and y values, from https://learn.adafruit.com/adafruit-2-8-tft-touch-shield-v2/touchscreen-paint-demo
 #define TS_MINX 150
@@ -51,9 +54,10 @@ class Display
 public:
 
     Display(){};
-
+    
     Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
     Adafruit_FT6206 ctp = Adafruit_FT6206();
+    
     void init();
 	  void initState(Utils&);
     void printOnScreen(Utils&);

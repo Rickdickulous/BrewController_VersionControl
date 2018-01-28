@@ -2,14 +2,14 @@
 
 
 void Display::init() {
-    tft.begin();
-    tft.fillScreen(Bg);
+    disp.tft.begin();
+    disp.tft.fillScreen(Bg);
     
     // *** Capacitive Touch Setup ***
-    if(!ctp.begin())
+    if(!disp.ctp.begin())
     {
         Serial.println("Unable to initialize ctp!");
-        tft.print("Cap Touch Init Failed!");
+        disp.tft.print("Cap Touch Init Failed!");
     }
 
 }

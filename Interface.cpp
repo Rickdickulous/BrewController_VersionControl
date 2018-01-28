@@ -12,9 +12,6 @@ unsigned long currentMillis = 0;
 void Interface::init() {
     BrewState * bs = static_cast<BrewState*>(StateMap[utils.currentState]);
     bs->dispInit();
-  
-    disp.init();
-    disp.initState(utils);
     
     utils.currentState = PRE_MASH;
     utils.init();
@@ -23,10 +20,11 @@ void Interface::init() {
 
 void Interface::brewsistantManager() {
     manageTimedServices();
-    
+
+    BrewState * bs = static_cast<BrewState*>(StateMap[utils.currentState]);
     if (utils.currentState != utils.prevState)
     {
-        disp.initState(utils);  
+        bs->dispInit();
     }
 }
 
@@ -55,11 +53,7 @@ void Interface::manageTimedServices() {
         }  // long
         prevMillis_short = currentMillis;
     }  // short
-
-    if ( bs->touchControl() ) {
-        bs->dispUpdate();
-        delay(100);
-    }
-    // disp.touchControl(utils);  
+    
+    disp.touchControl(utils);  
 }
 

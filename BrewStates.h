@@ -9,7 +9,7 @@ public:
     BrewState(){};
     virtual void dispInit();
     virtual void dispUpdate();
-    virtual bool touchControl();
+    // virtual void touchControl();   // TODO
 };
 
 class PreMash : BrewState {
@@ -17,7 +17,6 @@ public:
     PreMash(){};
     void dispInit();
     void dispUpdate();
-    bool touchControl();
 };
 
 class Mash : BrewState {
@@ -25,7 +24,6 @@ public:
     Mash(){};
     void dispInit();
     void dispUpdate();
-    bool touchControl();
 };
 
 

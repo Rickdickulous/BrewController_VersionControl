@@ -6,13 +6,15 @@ int prevTempSetpoint = 0;
 int prevValveSetpoint = 0;
 long prevPrimaryTimer = 0;
 
+
+/*
 bool originalTouchControl() {
-  if (!disp.ctp.touched())
+  if (!utils.ctp.touched())
     {
         return false;
     }
 
-    TS_Point p = disp.ctp.getPoint();
+    TS_Point p = utils.ctp.getPoint();
     p.x = map(p.x, 0, 240, 240, 0);
     p.y = map(p.y, 0, 320, 320, 0);
     //p.x = map(p.x, TS_MINX, TS_MAXX, 0, tft.width());
@@ -51,10 +53,11 @@ bool originalTouchControl() {
         return false;
     }
 }
+*/
 
 void PreMash::dispInit() {
   Serial.println("PreMash::dispInit() invoked");
-
+            /*
             disp.tft.setTextColor(Tc);
             disp.tft.setTextSize(2);
 
@@ -103,12 +106,15 @@ void PreMash::dispInit() {
             disp.tft.print("BEGIN");
 
             disp.tft.setTextSize(2);  // reset text size for live updates
+            */
 }
 
 
 void PreMash::dispUpdate() {
   Serial.println("PreMash::dispUpdate() invoked");
 
+
+/*
   // *** Display Target Temp ***
             if (prevTempSetpoint != 0)
             {
@@ -131,16 +137,14 @@ void PreMash::dispUpdate() {
             disp.tft.setTextColor(Tc);
             disp.tft.print(utils.primaryTimer.getRemainingTime());
             prevPrimaryTimer = utils.primaryTimer.getRemainingTime();
+    */
 }
 
-
-bool PreMash::touchControl() {
-  return originalTouchControl();
-}
 
 void Mash::dispInit() {
   Serial.println("Mash::dispInit() invoked");
 
+/*
     disp.tft.setTextColor(Tc);
             disp.tft.setTextSize(2);
 
@@ -169,13 +173,14 @@ void Mash::dispInit() {
             disp.tft.print("+");
 
             // tft.setTextSize(2);  // reset text size for live updates  // TBD: Is this necessary?
-
+*/
 }
 
 
 void Mash::dispUpdate() {
   Serial.println("Mash::dispUpdate() invoked");
 
+/*
   // *** Display Target Temp ***
             if (prevTempSetpoint != 0)
             {
@@ -212,10 +217,7 @@ void Mash::dispUpdate() {
             disp.tft.setTextColor(Tc);
             disp.tft.println(utils.valveSetpoint);
             prevValveSetpoint = utils.valveSetpoint;
+            */
 }
 
-
-bool Mash::touchControl() {
-  return originalTouchControl();
-}
 

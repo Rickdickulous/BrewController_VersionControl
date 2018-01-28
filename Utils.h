@@ -13,6 +13,7 @@
 #define FLAME_SENSOR_PIN 1
 #define BUZZER_PIN 8
 
+
 enum States {
     PRE_MASH,
     MASH,
@@ -47,7 +48,7 @@ public:
 
     int currentState;
     int prevState;
-
+    
     bool const debug = true;
     int thermistorBufferIndex = 0;
     double currentTemp_f;
