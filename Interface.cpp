@@ -22,8 +22,7 @@ void Interface::brewsistantManager() {
     manageTimedServices();
 
     BrewState * bs = static_cast<BrewState*>(StateMap[utils.currentState]);
-    if (utils.currentState != utils.prevState)
-    {
+    if (utils.currentState != utils.prevState) {
         bs->dispInit();
     }
 }
@@ -32,13 +31,11 @@ void Interface::manageTimedServices() {
     currentMillis = millis();
     BrewState * bs = static_cast<BrewState*>(StateMap[utils.currentState]);
     
-    if ( (currentMillis - prevMillis_short) >= UpdateInterval_short )
-    {
+    if ( (currentMillis - prevMillis_short) >= UpdateInterval_short ) {
         utils.cacheThermistorReadings();
         utils.handleFlameSensor();
         
-        if ( (currentMillis - prevMillis_long) >= UpdateInterval_long )
-        {
+        if ( (currentMillis - prevMillis_long) >= UpdateInterval_long ) {
             utils.everythingTempControl();  // must come before displaying!
 
             bs->dispUpdate();

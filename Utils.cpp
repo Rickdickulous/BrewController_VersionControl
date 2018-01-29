@@ -18,8 +18,7 @@ void Utils::calcProbeTemp(void)
 {
     // Get Average
     float sum = 0;
-    for (int i=0; i<ThermistorBufferSize; i++)
-    {
+    for (int i=0; i<ThermistorBufferSize; i++) {
         sum += thermistorBuffer[i];
     }
     float avg = sum/ThermistorBufferSize;
@@ -34,12 +33,10 @@ void Utils::calcProbeTemp(void)
 void Utils::handleFlameSensor(void)
 {
     int flameSensorInput = analogRead(FLAME_SENSOR_PIN);
-  if (flameSensorInput > 900)
-  {
+  if (flameSensorInput > 900) {
     //Serial.println("NO FLAME, WAYNE!");
   }
-  else
-  {
+  else {
     //Serial.println("FLAME ON, GARTH!");
   }
 }
@@ -47,8 +44,7 @@ void Utils::handleFlameSensor(void)
 
 void Utils::cacheThermistorReadings()
 {
-    if (thermistorBufferIndex == (ThermistorBufferSize - 1) )
-    { 
+    if (thermistorBufferIndex == (ThermistorBufferSize - 1) ) { 
         thermistorBufferIndex = 0;
     }
 
@@ -77,10 +73,8 @@ void Utils::everythingTempControl()
 
 void Utils::makeNoise(int selector)
 {
-    switch(selector)
-    {
-    case 1:
-        {
+    switch(selector) {
+        case 1: {
             int melody[] = {NOTE_C5, NOTE_G5, NOTE_A4, NOTE_B5, NOTE_G5, NOTE_A6, NOTE_B5, NOTE_D5};
 
             for (int thisNote = 0; thisNote < 8; thisNote++)

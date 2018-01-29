@@ -34,8 +34,7 @@ private:
 };
 
 
-class Utils
-{
+class Utils {
 public:
     Utils(){ 
       currentState = PRE_MASH;
@@ -67,16 +66,15 @@ public:
 
     bool noiseMade = false;
 
-    int calcValveSetpoint()
-    {
+    int calcValveSetpoint() {
         int retVal;
         float diff = (float) currentTempSetpoint_f - currentTemp_f;
 
-        if (diff < 1.25)
-            {valveSetpoint = JIM_MIN;
+        if (diff < 1.25) {
+            valveSetpoint = JIM_MIN;
               //if (false == noiseMade)
               //{makeNoise(1); noiseMade = true;}
-            }
+        }
         else if (diff < 2)
             {valveSetpoint = 145;}
         else if (diff < 3)
