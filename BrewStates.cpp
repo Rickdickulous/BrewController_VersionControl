@@ -6,15 +6,16 @@ int prevTempSetpoint = 0;
 int prevValveSetpoint = 0;
 long prevPrimaryTimer = 0;
 
+Display disp = Display();
 
-/*
-bool originalTouchControl() {
-  if (!utils.ctp.touched())
+
+bool originalTouchControl(Utils * const utils_Ptr) {
+  if (!disp.ctp.touched())
     {
         return false;
     }
 
-    TS_Point p = utils.ctp.getPoint();
+    TS_Point p = disp.ctp.getPoint();
     p.x = map(p.x, 0, 240, 240, 0);
     p.y = map(p.y, 0, 320, 320, 0);
     //p.x = map(p.x, TS_MINX, TS_MAXX, 0, tft.width());
@@ -25,24 +26,17 @@ bool originalTouchControl() {
     Serial.print("p.y = ");
     Serial.println(p.y);
 
-    switch (utils.currentState) {
-        case PRE_MASH: {
-
-          break;
-        }
-    }
-
     // is button press within +/- button y range?
     if ( 165 <= p.y <= 265 )
     {
         // yes! Based on x value, is it an up or down press?
         if ( (30 <= p.x) && ( p.x <= 90) )
         {
-            utils.currentTempSetpoint_f--;
+            utils_Ptr->currentTempSetpoint_f--;
         }
         else if ( (130 <= p.x) && (p.x <= 210) )
         {
-            utils.currentTempSetpoint_f++;
+            utils_Ptr->currentTempSetpoint_f++;
         }
 
         return true;
@@ -53,11 +47,16 @@ bool originalTouchControl() {
         return false;
     }
 }
-*/
+
 
 void PreMash::dispInit() {
   Serial.println("PreMash::dispInit() invoked");
-            /*
+
+    // since PreMash is the first state, we use it to initialize the display itself.
+    disp.init();
+    
+    // now begin state init
+    
             disp.tft.setTextColor(Tc);
             disp.tft.setTextSize(2);
 
@@ -67,7 +66,7 @@ void PreMash::dispInit() {
             // drawRect(x, y, width, height)
             // minus
             disp.tft.drawRect(30, 50, 80, 60, BLACK);
-             disp.tft.setCursor(55, 70);
+            disp.tft.setCursor(55, 70);
             disp.tft.setTextColor(BLUE);
             disp.tft.setTextSize(3);
             disp.tft.print("-");
@@ -106,7 +105,7 @@ void PreMash::dispInit() {
             disp.tft.print("BEGIN");
 
             disp.tft.setTextSize(2);  // reset text size for live updates
-            */
+            
 }
 
 
@@ -141,10 +140,15 @@ void PreMash::dispUpdate() {
 }
 
 
+bool PreMash::touchControl() {
+  return originalTouchControl(utils_Ptr);
+}
+
+
 void Mash::dispInit() {
   Serial.println("Mash::dispInit() invoked");
 
-/*
+    disp.tft.fillScreen(Bg);
     disp.tft.setTextColor(Tc);
             disp.tft.setTextSize(2);
 
@@ -172,15 +176,15 @@ void Mash::dispInit() {
             disp.tft.setTextColor(RED);
             disp.tft.print("+");
 
-            // tft.setTextSize(2);  // reset text size for live updates  // TBD: Is this necessary?
-*/
+            disp.tft.setTextSize(2);  // reset text size for live updates  // TBD: Is this necessary?
+
 }
 
 
 void Mash::dispUpdate() {
   Serial.println("Mash::dispUpdate() invoked");
 
-/*
+
   // *** Display Target Temp ***
             if (prevTempSetpoint != 0)
             {
@@ -190,8 +194,8 @@ void Mash::dispUpdate() {
             }
             disp.tft.setCursor(150, 25);
             disp.tft.setTextColor(Tc);
-            disp.tft.print(utils.currentTempSetpoint_f);
-            prevTempSetpoint = utils.currentTempSetpoint_f;
+            disp.tft.print(utils_Ptr->currentTempSetpoint_f);
+            prevTempSetpoint = utils_Ptr->currentTempSetpoint_f;
 
             // *** Display Current Water Temp ***
             if (prevActualTemp != 0)
@@ -202,8 +206,8 @@ void Mash::dispUpdate() {
             }
             disp.tft.setCursor(150, 75);
             disp.tft.setTextColor(Tc);
-            disp.tft.print(utils.currentTemp_f);
-            prevActualTemp = utils.currentTemp_f;
+            disp.tft.print(utils_Ptr->currentTemp_f);
+            prevActualTemp = utils_Ptr->currentTemp_f;
 
             // *** Display Valve Setpoint ***
             if (prevValveSetpoint != 0)
@@ -215,9 +219,14 @@ void Mash::dispUpdate() {
 
             disp.tft.setCursor(185, 125);
             disp.tft.setTextColor(Tc);
-            disp.tft.println(utils.valveSetpoint);
-            prevValveSetpoint = utils.valveSetpoint;
-            */
+            disp.tft.println(utils_Ptr->valveSetpoint);
+            prevValveSetpoint = utils_Ptr->valveSetpoint;
+            
+}
+
+
+bool Mash::touchControl() {
+  return originalTouchControl(utils_Ptr);
 }
 
 

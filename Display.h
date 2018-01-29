@@ -3,18 +3,16 @@
 
 #include "Utils.h"
 #include "Arduino.h"            // Core Display Libraries
+#include "Adafruit_ILI9341.h"   // Core Display Libraries
+#include "Adafruit_FT6206.h"    // Touch Display Libraries
 
 // For the Adafruit shield, these are the default.
 #define TFT_DC 9
 #define TFT_CS 10
-#include "Adafruit_ILI9341.h"   // Core Display Libraries
-#include "Adafruit_FT6206.h"    // Touch Display Libraries
-
 
 
 #define SCREEN_WIDTH_PIXELS 240
 #define SCREEN_HEIGHT_PIXELS 320
-
 
 
 // Touch screen adjusted min and max, x and y values, from https://learn.adafruit.com/adafruit-2-8-tft-touch-shield-v2/touchscreen-paint-demo
@@ -22,6 +20,7 @@
 #define TS_MINY 130
 #define TS_MAXX 3800
 #define TS_MAXY 4000
+
 
 // Color definitions
 #define BLACK       0x0000      /*   0,   0,   0 */
@@ -58,15 +57,21 @@ public:
     Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
     Adafruit_FT6206 ctp = Adafruit_FT6206();
     
-    void init();
-	  void initState(Utils&);
-    void printOnScreen(Utils&);
-    void touchControl(Utils&);
+    void init() {
+        tft.begin();
+        tft.fillScreen(Bg);
+        
+        // *** Capacitive Touch Setup ***
+        if(!ctp.begin())
+        {
+            Serial.println("Unable to initialize ctp!");
+            tft.print("Cap Touch Init Failed!");
+        }
+    }
+
 
 	~Display(){};
 };
 
-extern Display disp;  // ! Important trick here - this statement makes a global object disp that when
-                      //   instantiated is accessible throughout the program
 
 #endif // Display_h

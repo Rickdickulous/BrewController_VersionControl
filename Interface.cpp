@@ -53,7 +53,7 @@ void Interface::manageTimedServices() {
         }  // long
         prevMillis_short = currentMillis;
     }  // short
-    
-    disp.touchControl(utils);  
+
+    bs->touchControl(); 
 }
 

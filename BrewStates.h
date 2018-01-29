@@ -9,21 +9,29 @@ public:
     BrewState(){};
     virtual void dispInit();
     virtual void dispUpdate();
-    // virtual void touchControl();   // TODO
+    virtual bool touchControl();
 };
 
 class PreMash : BrewState {
 public:
-    PreMash(){};
+    PreMash(Utils * const utils_Ptr) : utils_Ptr(utils_Ptr) {};
     void dispInit();
     void dispUpdate();
+    bool touchControl();
+
+private:
+    Utils * const utils_Ptr;
 };
 
 class Mash : BrewState {
 public:
-    Mash(){};
+    Mash(Utils * const utils_Ptr) : utils_Ptr(utils_Ptr) {};
     void dispInit();
     void dispUpdate();
+    bool touchControl();
+
+private:
+    Utils * const utils_Ptr;
 };
 
 

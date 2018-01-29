@@ -20,8 +20,8 @@ public:
     Display disp = Display();
     
 
-   PreMash preMashState = PreMash();
-   Mash mashState = Mash();
+   PreMash preMashState = PreMash(&utils);
+   Mash mashState = Mash(&utils);
 
 private:
     void * StateMap[MAX_STATES] = { &preMashState,
@@ -29,7 +29,6 @@ private:
                                   };
 
 };
-
 
 
 #endif // Interface_h
