@@ -17,17 +17,14 @@ public:
     void manageTimedServices();
 
     Utils utils = Utils();
-    Display disp = Display();
-    
-
-   PreMash preMashState = PreMash(&utils);
-   Mash mashState = Mash(&utils);
 
 private:
+    PreMash preMashState = PreMash(&utils);
+    //Mash mashState = Mash(&utils);
+    
     void * StateMap[MAX_STATES] = { &preMashState,
-                                    &mashState
+                                    //&mashState
                                   };
-
 };
 
 

@@ -8,22 +8,14 @@ long prevPrimaryTimer = 0;
 
 Display disp = Display();
 
-
+/*
 bool originalTouchControl(Utils * const utils_Ptr) {
-  if (!disp.ctp.touched()) {
-        return false;
-    }
+  // TO BE DELETED
+  
 
-    TS_Point p = disp.ctp.getPoint();
-    p.x = map(p.x, 0, 240, 240, 0);
-    p.y = map(p.y, 0, 320, 320, 0);
     //p.x = map(p.x, TS_MINX, TS_MAXX, 0, tft.width());
     //p.y = map(p.y, TS_MINY, TS_MAXY, 0, tft.height());
 
-    Serial.print("p.x = ");
-    Serial.println(p.x);
-    Serial.print("p.y = ");
-    Serial.println(p.y);
 
     // is button press within +/- button y range?
     if ( 165 <= p.y <= 265 ) {
@@ -40,11 +32,12 @@ bool originalTouchControl(Utils * const utils_Ptr) {
         return false;
     }
 }
+*/
 
 
 void PreMash::dispInit() {
-  Serial.println("PreMash::dispInit() invoked");
-
+    //Serial.println("PreMash::dispInit() invoked");
+    
     // since PreMash is the first state, we use it to initialize the display itself.
     disp.init();
     
@@ -66,7 +59,7 @@ void PreMash::dispInit() {
 
     // plus
     disp.tft.drawRect(140, 50, 80, 60, BLACK);
-     disp.tft.setCursor(170, 70);
+    disp.tft.setCursor(170, 70);
     disp.tft.setTextColor(RED);
     disp.tft.print("+");
 
@@ -102,7 +95,7 @@ void PreMash::dispInit() {
 
 
 void PreMash::dispUpdate() {
-    Serial.println("PreMash::dispUpdate() invoked");
+    //Serial.println("PreMash::dispUpdate() invoked");
 
     // *** Display Target Temp ***
     if (prevTempSetpoint != 0) {
@@ -127,8 +120,8 @@ void PreMash::dispUpdate() {
 }
 
 
-bool PreMash::touchControl() {
-  return originalTouchControl(utils_Ptr);
+bool PreMash::touchControl(TS_Point&) {
+    // loop through array of buttons and call checkIfAreaTouched();
 }
 
 
@@ -207,5 +200,5 @@ void Mash::dispUpdate() {
 
 
 bool Mash::touchControl() {
-  return originalTouchControl(utils_Ptr);
+  // return originalTouchControl(utils_Ptr);
 }

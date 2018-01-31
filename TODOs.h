@@ -8,7 +8,11 @@
  *
  * +++ PID control flame
  *
- * +++ Could use a class to make new object for each state and just call init() and update() methods on a pointer to a display object.
+ * +++ use "if (timerStarted)" in control loops
+ *
+ *
+ *
+ *
  *
  * OTHER:
  * 1. Calibrate temp sensor

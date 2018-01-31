@@ -10,8 +10,8 @@ unsigned long currentMillis = 0;
 
 
 void Interface::init() {
-    BrewState * bs = static_cast<BrewState*>(StateMap[utils.currentState]);
-    bs->dispInit();
+    BrewState * brewState_ptr = static_cast<BrewState*>(StateMap[utils.currentState]);
+    brewState_ptr->dispInit();
     
     utils.currentState = PRE_MASH;
     utils.init();
@@ -21,15 +21,15 @@ void Interface::init() {
 void Interface::brewsistantManager() {
     manageTimedServices();
 
-    BrewState * bs = static_cast<BrewState*>(StateMap[utils.currentState]);
+    BrewState * brewState_ptr = static_cast<BrewState*>(StateMap[utils.currentState]);
     if (utils.currentState != utils.prevState) {
-        bs->dispInit();
+        brewState_ptr->dispInit();
     }
 }
 
 void Interface::manageTimedServices() {
     currentMillis = millis();
-    BrewState * bs = static_cast<BrewState*>(StateMap[utils.currentState]);
+    BrewState * brewState_ptr = static_cast<BrewState*>(StateMap[utils.currentState]);
     
     if ( (currentMillis - prevMillis_short) >= UpdateInterval_short ) {
         utils.cacheThermistorReadings();
@@ -38,9 +38,7 @@ void Interface::manageTimedServices() {
         if ( (currentMillis - prevMillis_long) >= UpdateInterval_long ) {
             utils.everythingTempControl();  // must come before displaying!
 
-            bs->dispUpdate();
-
-            //disp.printOnScreen(utils);
+            brewState_ptr->dispUpdate();
 
             if (utils.debug)
             {
@@ -51,6 +49,17 @@ void Interface::manageTimedServices() {
         prevMillis_short = currentMillis;
     }  // short
 
-    bs->touchControl(); 
+    if (disp.ctp.touched()) {
+        TS_Point p = disp.ctp.getPoint();
+        p.x = map(p.x, 0, 240, 240, 0);  // convert to numbers that make sense on our screen
+        p.y = map(p.y, 0, 320, 320, 0);  // convert to numbers that make sense on our screen
+
+        Serial.print("p.x = ");
+        Serial.println(p.x);
+        Serial.print("p.y = ");
+        Serial.println(p.y);
+    
+        brewState_ptr->touchControl(p);
+    }
 }
 

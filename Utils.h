@@ -48,7 +48,7 @@ public:
     int currentState;
     int prevState;
     
-    bool const debug = true;
+    bool const debug = false;
     int thermistorBufferIndex = 0;
     double currentTemp_f;
     int valveSetpoint;

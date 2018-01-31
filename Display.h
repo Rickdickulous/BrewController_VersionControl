@@ -48,6 +48,32 @@ int const Bg = DARKGREY;     // Background color
 int const Tc = GREENYELLOW;  // text color
 
 
+struct BoxCoords {
+    int x_origin;
+    int y_origin;
+    int width;
+    int height;
+};
+
+
+class Button {
+public:
+    Button();
+    virtual void checkIfAreaTouched(TS_Point&);  // executes sideEffect function
+    virtual void drawButton();
+};
+
+class PreMash_TempUp : Button {
+public:
+      PreMash_TempUp() {};
+      void drawButton();
+      void checkIfAreaTouched(TS_Point&);
+      
+private:               // x,  y,  w,  h
+    BoxCoords coords = {140, 50, 80, 60};    
+};
+
+
 class Display
 {
 public:
@@ -71,6 +97,8 @@ public:
 
 	~Display(){};
 };
+
+extern Display disp;
 
 
 #endif // Display_h

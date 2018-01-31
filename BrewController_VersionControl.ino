@@ -1,8 +1,6 @@
-// Dick Bilt Libraries
 #include "Interface.h"
 
 Interface interface = Interface();
-
 
 void setup()
 {
