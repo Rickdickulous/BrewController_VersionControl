@@ -29,7 +29,7 @@ void Interface::brewsistantManager() {
 
 void Interface::manageTimedServices() {
     currentMillis = millis();
-    BrewState * brewState_ptr = static_cast<BrewState*>(StateMap[utils.currentState]);
+    BrewState * brewState_ptr = static_cast<BrewState*>(StateMap[utils.currentState]);  // TBD: What is the difference between static_cast here and just (BrewState*) cast??
     
     if ( (currentMillis - prevMillis_short) >= UpdateInterval_short ) {
         utils.cacheThermistorReadings();
@@ -60,6 +60,7 @@ void Interface::manageTimedServices() {
         Serial.println(p.y);
     
         brewState_ptr->touchControl(p);
+        brewState_ptr->dispUpdate();
     }
 }
 

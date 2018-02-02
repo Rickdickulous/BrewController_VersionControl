@@ -58,19 +58,30 @@ struct BoxCoords {
 
 class Button {
 public:
-    Button();
-    virtual void checkIfAreaTouched(TS_Point&);  // executes sideEffect function
-    virtual void drawButton();
+    Button(Utils * u_ptr) : utils_Ptr(u_ptr) {};
+    virtual void checkIfAreaTouched(TS_Point&) = 0;  // executes sideEffect function
+    virtual void drawButton() = 0;
+    Utils * utils_Ptr;
 };
 
 class PreMash_TempUp : Button {
 public:
-      PreMash_TempUp() {};
+      PreMash_TempUp(Utils * u_ptr) : Button(u_ptr) {};
       void drawButton();
       void checkIfAreaTouched(TS_Point&);
       
 private:               // x,  y,  w,  h
-    BoxCoords coords = {140, 50, 80, 60};    
+    BoxCoords coords = {140, 50, 80, 60};
+};
+
+
+class PreMash_TempDown : Button {
+public:
+    PreMash_TempDown(Utils * u_ptr) : Button(u_ptr) {};
+    void drawButton();
+    void checkIfAreaTouched(TS_Point&);
+private:
+    BoxCoords coords = {30, 50, 80, 60}; 
 };
 
 
@@ -99,6 +110,6 @@ public:
 };
 
 extern Display disp;
-
+extern Utils * utils_Ptr;
 
 #endif // Display_h

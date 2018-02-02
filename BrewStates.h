@@ -20,14 +20,14 @@ public:
     bool touchControl(TS_Point&);
 
 private:
-    // declare buttonst
-    // Button TempDown = Button();
-    // Button ...
+    PreMash_TempUp tempUp = PreMash_TempUp(utils_Ptr);
+    PreMash_TempDown tempDown = PreMash_TempDown(utils_Ptr);
+
+    void * buttons[2] = { &tempUp, &tempDown };
     
     // create array of pointers to button objects
     Utils * const utils_Ptr;
 };
-
 
 /* ***********
  *  TODO: Make a template class for mash states since they should all have identical interfaces
