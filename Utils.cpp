@@ -1,5 +1,7 @@
 #include "Utils.h"
 
+int currentTempSetpoint_f;
+
 void Utils::printDebug(void) {
     if (debug) {
       STR(currentTemp_f);
@@ -9,9 +11,7 @@ void Utils::printDebug(void) {
 }
 
 
-void Utils::init() {
-    
-} 
+void Utils::init() {currentTempSetpoint_f = 150;} 
 
 
 void Utils::calcProbeTemp(void)

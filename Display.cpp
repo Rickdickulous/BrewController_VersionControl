@@ -15,10 +15,7 @@ void PreMash_TempUp::drawButton() {
 void PreMash_TempUp::checkIfAreaTouched(TS_Point& point) {
     if ( (coords.x_origin <= point.x) && (point.x <= (coords.x_origin + coords.width ) ) ) {
         if ( coords.y_origin <= point.y <= (coords.y_origin + coords.height) ) {
-            Serial.println("Temp up pressed");
-            utils_Ptr->currentTempSetpoint_f++;
-            Serial.print("new temp setpoint: ");
-            Serial.println(utils_Ptr->currentTempSetpoint_f);
+            currentTempSetpoint_f++;
         }
     }
 }
@@ -36,11 +33,7 @@ void PreMash_TempDown::drawButton() {
 void PreMash_TempDown::checkIfAreaTouched(TS_Point& point) {
     if ( ( coords.x_origin <= point.x ) && (point.x <= (coords.x_origin + coords.width)) ) {
         if ( coords.y_origin <= point.y <= (coords.y_origin + coords.height) ) {
-            Serial.println("Temp down pressed");
-            utils_Ptr->currentTempSetpoint_f--;
-            
-            Serial.print("new temp setpoint: ");
-            Serial.println(utils_Ptr->currentTempSetpoint_f);
+            currentTempSetpoint_f--;
         }
     }
 }

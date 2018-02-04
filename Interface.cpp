@@ -51,7 +51,7 @@ void Interface::manageTimedServices() {
     if (disp.ctp.touched()) {
         TS_Point p = disp.ctp.getPoint();
         p.x = map(p.x, 0, 240, 240, 0);  // convert to numbers that make sense on our screen
-        p.y = map(p.y, 0, 320, 320, 0);  // convert to numbers that make sense on our screen
+        p.y = map(p.y, 0, 320, 320, 0);
 
         Serial.print("p.x = ");
         Serial.println(p.x);
@@ -60,6 +60,7 @@ void Interface::manageTimedServices() {
     
         brewState_ptr->touchControl(p);
         brewState_ptr->dispUpdate();
+        delay(100);
     }
 
 }

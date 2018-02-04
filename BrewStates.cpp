@@ -27,23 +27,6 @@ void PreMash::dispInit() {
        Button * button_ptr = static_cast<Button *>(buttons[i]);
        button_ptr->drawButton();
     }
-    
-
-    /*
-    // drawRect(x, y, width, height)
-    // minus
-    disp.tft.drawRect(30, 50, 80, 60, BLACK);
-    disp.tft.setCursor(55, 70);
-    disp.tft.setTextColor(BLUE);
-    disp.tft.setTextSize(3);
-    disp.tft.print("-");
-
-    // plus
-    disp.tft.drawRect(140, 50, 80, 60, BLACK);
-    disp.tft.setCursor(170, 70);
-    disp.tft.setTextColor(RED);
-    disp.tft.print("+");
-    */
 
     // ============= Mash Time =============
     
@@ -87,10 +70,10 @@ void PreMash::dispUpdate() {
     }
     disp.tft.setCursor(150, 25);
     disp.tft.setTextColor(Tc);
-    disp.tft.print(utils_Ptr->currentTempSetpoint_f);
+    disp.tft.print(currentTempSetpoint_f);
     Serial.print("PMDU Temp: ");
-    Serial.println(utils_Ptr->currentTempSetpoint_f);
-    prevTempSetpoint = utils_Ptr->currentTempSetpoint_f;
+    Serial.println(currentTempSetpoint_f);
+    prevTempSetpoint = currentTempSetpoint_f;
 
     if (prevPrimaryTimer != 0) {
         disp.tft.setCursor(150, 75);
@@ -159,8 +142,8 @@ void Mash::dispUpdate() {
     }
     disp.tft.setCursor(150, 25);
     disp.tft.setTextColor(Tc);
-    disp.tft.print(utils_Ptr->currentTempSetpoint_f);
-    prevTempSetpoint = utils_Ptr->currentTempSetpoint_f;
+    disp.tft.print(currentTempSetpoint_f);
+    prevTempSetpoint = currentTempSetpoint_f;
 
     // *** Display Current Water Temp ***
     if (prevActualTemp != 0) {
@@ -170,8 +153,8 @@ void Mash::dispUpdate() {
     }
     disp.tft.setCursor(150, 75);
     disp.tft.setTextColor(Tc);
-    disp.tft.print(utils_Ptr->currentTemp_f);
-    prevActualTemp = utils_Ptr->currentTemp_f;
+    disp.tft.print(utils.currentTemp_f);
+    prevActualTemp = utils.currentTemp_f;
 
     // *** Display Valve Setpoint ***
     if (prevValveSetpoint != 0) {

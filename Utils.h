@@ -14,7 +14,7 @@
 #define BUZZER_PIN 8
 
 
-int currentTempSetpoint_f = 150;
+extern int currentTempSetpoint_f;  // global variable for current temp setpoint
 
 
 enum States {
@@ -98,6 +98,5 @@ private:
 
 extern Utils utils;  // ! This is an important trick. This allocates a global variable called utils that when 
                      // instantiated is accesible throughout the program
-extern int currentTempSetpoint_f;
 
 #endif // Utils_h
