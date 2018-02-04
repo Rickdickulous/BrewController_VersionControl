@@ -6,33 +6,7 @@ int prevTempSetpoint = 0;
 int prevValveSetpoint = 0;
 long prevPrimaryTimer = 0;
 
-Display disp = Display();
-
-/*
-bool originalTouchControl(Utils * const utils_Ptr) {
-  // TO BE DELETED
-  
-
-    //p.x = map(p.x, TS_MINX, TS_MAXX, 0, tft.width());
-    //p.y = map(p.y, TS_MINY, TS_MAXY, 0, tft.height());
-
-
-    // is button press within +/- button y range?
-    if ( 165 <= p.y <= 265 ) {
-        // yes! Based on x value, is it an up or down press?
-        if ( (30 <= p.x) && ( p.x <= 90) ) {
-            utils_Ptr->currentTempSetpoint_f--;
-        }
-        else if ( (130 <= p.x) && (p.x <= 210) ) {
-            utils_Ptr->currentTempSetpoint_f++;
-        }
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-*/
+Display disp = Display();  // TODO: Move this variable into Display.cpp
 
 
 void PreMash::dispInit() {
@@ -48,7 +22,14 @@ void PreMash::dispInit() {
 
     disp.tft.setCursor(5, 25);
     disp.tft.print("Mash Temp: ");
+    
+    for (int i=0; i < NumButtons; i++) {
+       Button * button_ptr = static_cast<Button *>(buttons[i]);
+       button_ptr->drawButton();
+    }
+    
 
+    /*
     // drawRect(x, y, width, height)
     // minus
     disp.tft.drawRect(30, 50, 80, 60, BLACK);
@@ -62,6 +43,7 @@ void PreMash::dispInit() {
     disp.tft.setCursor(170, 70);
     disp.tft.setTextColor(RED);
     disp.tft.print("+");
+    */
 
     // ============= Mash Time =============
     
@@ -69,7 +51,7 @@ void PreMash::dispInit() {
     disp.tft.setTextColor(Tc);
     disp.tft.setTextSize(2);
     disp.tft.print("Mash Time: ");
-
+    
     // minus
     disp.tft.drawRect(30, 150, 80, 60, BLACK);
     disp.tft.setCursor(55, 170);
@@ -106,6 +88,8 @@ void PreMash::dispUpdate() {
     disp.tft.setCursor(150, 25);
     disp.tft.setTextColor(Tc);
     disp.tft.print(utils_Ptr->currentTempSetpoint_f);
+    Serial.print("PMDU Temp: ");
+    Serial.println(utils_Ptr->currentTempSetpoint_f);
     prevTempSetpoint = utils_Ptr->currentTempSetpoint_f;
 
     if (prevPrimaryTimer != 0) {
@@ -120,8 +104,12 @@ void PreMash::dispUpdate() {
 }
 
 
-bool PreMash::touchControl(TS_Point&) {
-    // loop through array of buttons and call checkIfAreaTouched();
+bool PreMash::touchControl(TS_Point& p) {
+    for (int i=0; i < NumButtons; i++) {
+        Serial.println(i);
+       Button * button_ptr = static_cast<Button *>(buttons[i]);
+       button_ptr->checkIfAreaTouched(p);
+    }
 }
 
 

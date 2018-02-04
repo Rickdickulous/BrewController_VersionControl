@@ -1,19 +1,24 @@
 #include "Display.h"
 
+// Display disp = Display();  // TODO: Move this variable from BrewStates.cpp to here
 
 void PreMash_TempUp::drawButton() {
     Serial.println("pm_TU_db");
     disp.tft.drawRect(coords.x_origin, coords.y_origin, coords.width, coords.height, BLACK);
     disp.tft.setCursor(170, 70);
     disp.tft.setTextColor(RED);
+    disp.tft.setTextSize(3);
     disp.tft.print("+");
 }
 
 
 void PreMash_TempUp::checkIfAreaTouched(TS_Point& point) {
-    if ( coords.x_origin <= point.x <= (coords.x_origin + coords.width) ) {
+    if ( (coords.x_origin <= point.x) && (point.x <= (coords.x_origin + coords.width ) ) ) {
         if ( coords.y_origin <= point.y <= (coords.y_origin + coords.height) ) {
-            utils_Ptr->currentTemp_f++;
+            Serial.println("Temp up pressed");
+            utils_Ptr->currentTempSetpoint_f++;
+            Serial.print("new temp setpoint: ");
+            Serial.println(utils_Ptr->currentTempSetpoint_f);
         }
     }
 }
@@ -29,9 +34,13 @@ void PreMash_TempDown::drawButton() {
 
 
 void PreMash_TempDown::checkIfAreaTouched(TS_Point& point) {
-    if ( coords.x_origin <= point.x <= (coords.x_origin + coords.width) ) {
+    if ( ( coords.x_origin <= point.x ) && (point.x <= (coords.x_origin + coords.width)) ) {
         if ( coords.y_origin <= point.y <= (coords.y_origin + coords.height) ) {
-            utils_Ptr->currentTemp_f--;
+            Serial.println("Temp down pressed");
+            utils_Ptr->currentTempSetpoint_f--;
+            
+            Serial.print("new temp setpoint: ");
+            Serial.println(utils_Ptr->currentTempSetpoint_f);
         }
     }
 }

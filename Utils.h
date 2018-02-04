@@ -14,6 +14,9 @@
 #define BUZZER_PIN 8
 
 
+int currentTempSetpoint_f = 150;
+
+
 enum States {
     PRE_MASH,
     MASH,
@@ -53,7 +56,6 @@ public:
     double currentTemp_f;
     int valveSetpoint;
     static int const ThermistorBufferSize = 20;
-    int currentTempSetpoint_f = 150;
     int thermistorBuffer[ThermistorBufferSize];  // circular buffer for thermistor readings
 
     void init();
@@ -96,5 +98,6 @@ private:
 
 extern Utils utils;  // ! This is an important trick. This allocates a global variable called utils that when 
                      // instantiated is accesible throughout the program
+extern int currentTempSetpoint_f;
 
 #endif // Utils_h

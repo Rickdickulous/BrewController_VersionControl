@@ -12,8 +12,7 @@ unsigned long currentMillis = 0;
 void Interface::init() {
     BrewState * brewState_ptr = static_cast<BrewState*>(StateMap[utils.currentState]);
     brewState_ptr->dispInit();
-    
-    utils.currentState = PRE_MASH;
+        
     utils.init();
 }
 
@@ -62,5 +61,6 @@ void Interface::manageTimedServices() {
         brewState_ptr->touchControl(p);
         brewState_ptr->dispUpdate();
     }
+
 }
 
