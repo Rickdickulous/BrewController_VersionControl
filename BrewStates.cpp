@@ -30,23 +30,10 @@ void PreMash::dispInit() {
 
     // ============= Mash Time =============
     
-    disp.tft.setCursor(5, 125);
     disp.tft.setTextColor(Tc);
     disp.tft.setTextSize(2);
-    disp.tft.print("Mash Time: ");
-    
-    // minus
-    disp.tft.drawRect(30, 150, 80, 60, BLACK);
-    disp.tft.setCursor(55, 170);
-    disp.tft.setTextColor(BLUE);
-    disp.tft.setTextSize(3);
-    disp.tft.print("-");
-
-    // plus
-    disp.tft.drawRect(140, 150, 80, 60, BLACK);
-    disp.tft.setCursor(170, 170);
-    disp.tft.setTextColor(RED);
-    disp.tft.print("+");
+    disp.tft.setCursor(5, 125);
+    disp.tft.print("Mash Time Min: ");
 
     // ============== BEGIN =============
     disp.tft.drawRect(30, 230, 160, 70, BLACK);
@@ -64,32 +51,28 @@ void PreMash::dispUpdate() {
 
     // *** Display Target Temp ***
     if (prevTempSetpoint != 0) {
-        disp.tft.setCursor(150, 25);
+        disp.tft.setCursor(127, 25);
         disp.tft.setTextColor(Bg);
         disp.tft.print(prevTempSetpoint);
     }
-    disp.tft.setCursor(150, 25);
+    disp.tft.setCursor(127, 25);
     disp.tft.setTextColor(Tc);
     disp.tft.print(currentTempSetpoint_f);
-    Serial.print("PMDU Temp: ");
-    Serial.println(currentTempSetpoint_f);
     prevTempSetpoint = currentTempSetpoint_f;
 
     if (prevPrimaryTimer != 0) {
-        disp.tft.setCursor(150, 75);
+        disp.tft.setCursor(175, 125);
         disp.tft.setTextColor(Bg);
         disp.tft.print(prevPrimaryTimer);
     }
-    disp.tft.setCursor(150, 125);
+    disp.tft.setCursor(175, 125);
     disp.tft.setTextColor(Tc);
-    disp.tft.print(utils_Ptr->primaryTimer.getRemainingTime());
-    prevPrimaryTimer = utils_Ptr->primaryTimer.getRemainingTime();
+    disp.tft.print(timer_sec);
+    prevPrimaryTimer = timer_sec;
 }
-
 
 bool PreMash::touchControl(TS_Point& p) {
     for (int i=0; i < NumButtons; i++) {
-        Serial.println(i);
        Button * button_ptr = static_cast<Button *>(buttons[i]);
        button_ptr->checkIfAreaTouched(p);
     }

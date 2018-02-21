@@ -84,13 +84,24 @@ private:
     BoxCoords coords = {30, 50, 80, 60}; 
 };
 
-/*
+
 class PreMash_TimeUp : Button {
+public:
     PreMash_TimeUp(Utils * u_ptr) : Button(u_ptr) {};
     void drawButton();
     void checkIfAreaTouched(TS_Point&);
+private:
+    BoxCoords coords = {140, 150, 80, 60};
 };
-*/
+
+class PreMash_TimeDown : Button {
+public:
+    PreMash_TimeDown(Utils * u_ptr) : Button(u_ptr) {};
+    void drawButton();
+    void checkIfAreaTouched(TS_Point&);
+private:
+    BoxCoords coords = {30, 150, 80, 60};
+};
 
 class Display
 {

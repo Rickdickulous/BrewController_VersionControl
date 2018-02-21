@@ -1,6 +1,7 @@
 #include "Utils.h"
 
 int currentTempSetpoint_f;
+int timer_sec;
 
 void Utils::printDebug(void) {
     if (debug) {
@@ -11,7 +12,8 @@ void Utils::printDebug(void) {
 }
 
 
-void Utils::init() {currentTempSetpoint_f = 150;} 
+void Utils::init() {currentTempSetpoint_f = 150;
+                    timer_sec = 30;} 
 
 
 void Utils::calcProbeTemp(void)
@@ -85,16 +87,5 @@ void Utils::makeNoise(int selector)
             }
         }  // case 1
     }  // switch(selector)
-}
-
-Timer::Timer(int mins) : _duration_sec(mins*60) {}
-
-void Timer::decrementSecond() {
-    _duration_sec--;
-}
-
-
-int Timer::getRemainingTime() {
-    return _duration_sec;
 }
 

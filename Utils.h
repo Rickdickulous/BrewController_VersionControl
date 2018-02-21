@@ -15,7 +15,7 @@
 
 
 extern int currentTempSetpoint_f;  // global variable for current temp setpoint
-
+extern int timer_sec;
 
 enum States {
     PRE_MASH,
@@ -23,17 +23,6 @@ enum States {
     //PRE_BOIL,
     //BOIL
     MAX_STATES
-};
-
-
-class Timer {
-public:
-    Timer(int minutes);
-    void decrementSecond();
-    int getRemainingTime();
-
-private:
-    int _duration_sec;
 };
 
 
@@ -45,12 +34,9 @@ public:
       // currentTemp = tempController.getCurrentTemp();  <- have this initialized before Utils.
     };
 
-    Timer primaryTimer = Timer(30);
-    Timer secondaryTimer = Timer(0);
-
     int currentState;
     int prevState;
-    
+
     bool const debug = false;
     int thermistorBufferIndex = 0;
     double currentTemp_f;
