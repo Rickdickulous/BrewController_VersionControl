@@ -2,6 +2,7 @@
 
 int currentTempSetpoint_f;
 int timer_sec;
+Utils utils;
 
 void Utils::printDebug(void) {
     if (debug) {

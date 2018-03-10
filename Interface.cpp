@@ -22,6 +22,7 @@ void Interface::brewsistantManager() {
 
     BrewState * brewState_ptr = static_cast<BrewState*>(StateMap[utils.currentState]);
     if (utils.currentState != utils.prevState) {
+      utils.prevState = utils.currentState;
         brewState_ptr->dispInit();
     }
 }

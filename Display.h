@@ -103,6 +103,15 @@ private:
     BoxCoords coords = {30, 150, 80, 60};
 };
 
+class PreMash_Begin : Button {
+public:
+    PreMash_Begin(Utils * u_ptr) : Button(u_ptr) {};
+    void drawButton();
+    void checkIfAreaTouched(TS_Point&);
+private:
+    BoxCoords coords = {30, 230, 160, 70};
+};
+
 class Display
 {
 public:

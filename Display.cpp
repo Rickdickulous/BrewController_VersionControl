@@ -67,4 +67,22 @@ void PreMash_TimeDown::checkIfAreaTouched(TS_Point& point) {
     }
 }
 
+void PreMash_Begin::drawButton() {
+    disp.tft.drawRect(coords.x_origin, coords.y_origin, coords.width, coords.height, BLACK);
+    disp.tft.setCursor(90, 275);
+    disp.tft.setTextSize(2);
+    disp.tft.setTextColor(YELLOW);
+    disp.tft.print("BEGIN");
+}
+
+void PreMash_Begin::checkIfAreaTouched(TS_Point& point) {
+    if ( (coords.x_origin <= point.x ) && (point.x <= (coords.x_origin + coords.width)) ) {
+        if ( coords.y_origin <= point.y && (point.y <= (coords.y_origin + coords.height)) ) {
+            utils.currentState = MASH;
+            Serial.print("currentState beg = ");
+            Serial.println(utils.currentState);
+        }
+    }
+}
+
 

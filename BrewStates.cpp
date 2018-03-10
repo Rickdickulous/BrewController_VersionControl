@@ -16,38 +16,30 @@ void PreMash::dispInit() {
     disp.init();
     
     // now begin state init
-    
+
+    // constants
     disp.tft.setTextColor(Tc);
     disp.tft.setTextSize(2);
-
+    
     disp.tft.setCursor(5, 25);
     disp.tft.print("Mash Temp: ");
     
+    disp.tft.setCursor(5, 125);
+    disp.tft.print("Mash Time Min: ");
+
+    // buttons
     for (int i=0; i < NumButtons; i++) {
        Button * button_ptr = static_cast<Button *>(buttons[i]);
        button_ptr->drawButton();
     }
-
-    // ============= Mash Time =============
     
-    disp.tft.setTextColor(Tc);
-    disp.tft.setTextSize(2);
-    disp.tft.setCursor(5, 125);
-    disp.tft.print("Mash Time Min: ");
-
-    // ============== BEGIN =============
-    disp.tft.drawRect(30, 230, 160, 70, BLACK);
-    disp.tft.setCursor(90, 275);
-    disp.tft.setTextSize(2);
-    disp.tft.setTextColor(YELLOW);
-    disp.tft.print("BEGIN");
-
     disp.tft.setTextSize(2);  // reset text size for live updates
 }
 
 
 void PreMash::dispUpdate() {
-    //Serial.println("PreMash::dispUpdate() invoked");
+    Serial.print("currentState = ");
+    Serial.println(utils.currentState);
 
     // *** Display Target Temp ***
     if (prevTempSetpoint != 0) {

@@ -24,8 +24,9 @@ private:
     PreMash_TempDown tempDown = PreMash_TempDown(utils_Ptr);
     PreMash_TimeUp timeUp = PreMash_TimeUp(utils_Ptr);
     PreMash_TimeDown timeDown = PreMash_TimeDown(utils_Ptr);
-    static int const NumButtons = 4;  // must equal number of buttons in buttons[]
-    void * buttons[NumButtons] = { &tempUp, &tempDown, &timeUp, &timeDown };
+    PreMash_Begin beginButton = PreMash_Begin(utils_Ptr);
+    static int const NumButtons = 5;  // must equal number of buttons in buttons[] below
+    void * buttons[NumButtons] = { &tempUp, &tempDown, &timeUp, &timeDown, &beginButton };
     
     // create array of pointers to button objects
     Utils * const utils_Ptr;
