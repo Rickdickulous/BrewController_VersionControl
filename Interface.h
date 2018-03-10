@@ -4,7 +4,6 @@
 #include "Arduino.h"
 #include "Display.h"
 #include "Utils.h"
-#include "BrewStates.h"
 
 
 class Interface
@@ -17,14 +16,8 @@ public:
     void manageTimedServices();
 
     Utils utils = Utils();
+    Display disp = Display();
 
-private:
-    PreMash preMashState = PreMash(&utils);
-    //Mash mashState = Mash(&utils);
-    
-    void * StateMap[MAX_STATES] = { &preMashState,
-                                    //&mashState
-                                  };
 };
 
 

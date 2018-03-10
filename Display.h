@@ -58,56 +58,60 @@ struct BoxCoords {
 
 class Button {
 public:
-    Button(Utils * u_ptr) : utils_Ptr(u_ptr) {};
+    Button() {};
     virtual void checkIfAreaTouched(TS_Point&) = 0;  // executes sideEffect function
     virtual void drawButton() = 0;
-    Utils * utils_Ptr;
 };
 
-class PreMash_TempUp : Button {
+class ControllerUp : Button {
 public:
-      PreMash_TempUp(Utils * u_ptr) : Button(u_ptr) {};
+      ControllerUp() {};
       void drawButton();
       void checkIfAreaTouched(TS_Point&);
+      ~ControllerUp() {};
       
 private:               // x,  y,  w,  h
     BoxCoords coords = {140, 50, 80, 60};
 };
 
 
-class PreMash_TempDown : Button {
+class ControllerDown : Button {
 public:
-    PreMash_TempDown(Utils * u_ptr) : Button(u_ptr) {};
+    ControllerDown() {};
     void drawButton();
     void checkIfAreaTouched(TS_Point&);
+    ~ControllerDown() {};
 private:
     BoxCoords coords = {30, 50, 80, 60}; 
 };
 
 
-class PreMash_TimeUp : Button {
+class TimeUp : Button {
 public:
-    PreMash_TimeUp(Utils * u_ptr) : Button(u_ptr) {};
+    TimeUp() {};
     void drawButton();
     void checkIfAreaTouched(TS_Point&);
+    ~TimeUp() {};
 private:
     BoxCoords coords = {140, 150, 80, 60};
 };
 
-class PreMash_TimeDown : Button {
+class TimeDown : Button {
 public:
-    PreMash_TimeDown(Utils * u_ptr) : Button(u_ptr) {};
+    TimeDown() {};
     void drawButton();
     void checkIfAreaTouched(TS_Point&);
+    ~TimeDown() {};
 private:
     BoxCoords coords = {30, 150, 80, 60};
 };
 
-class PreMash_Begin : Button {
+class StartTimer : Button {
 public:
-    PreMash_Begin(Utils * u_ptr) : Button(u_ptr) {};
+    StartTimer(){};
     void drawButton();
     void checkIfAreaTouched(TS_Point&);
+    ~StartTimer(){};
 private:
     BoxCoords coords = {30, 230, 160, 70};
 };
@@ -121,22 +125,24 @@ public:
     Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
     Adafruit_FT6206 ctp = Adafruit_FT6206();
     
-    void init() {
-        tft.begin();
-        tft.fillScreen(Bg);
-        
-        // *** Capacitive Touch Setup ***
-        if(!ctp.begin()) {
-            Serial.println("Unable to initialize ctp!");
-            tft.print("Cap Touch Init Failed!");
-        }
-    }
+    void init();
+    void dispUpdate();
+    bool touchControl(TS_Point&);
+
+    ControllerUp contUp = ControllerUp();
+    ControllerDown contDown = ControllerDown();
+    TimeUp timeUp = TimeUp();
+    TimeDown timeDown = TimeDown();
+    StartTimer startTimer = StartTimer();
+    static int const NumButtons = 5;  // must equal number of buttons in buttons[] below
+    void * buttons[NumButtons] = { &contUp, &contDown, &timeUp, &timeDown, &startTimer };
 
 
 	~Display(){};
+
 };
 
-extern Display disp;
-extern Utils * utils_Ptr;
+//extern Utils utils;
+//extern Display disp;
 
 #endif // Display_h

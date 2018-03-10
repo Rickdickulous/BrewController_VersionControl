@@ -14,9 +14,6 @@
 #define BUZZER_PIN 8
 
 
-extern int currentTempSetpoint_f;  // global variable for current temp setpoint
-extern int timer_sec;
-
 enum States {
     PRE_MASH,
     MASH,
@@ -29,14 +26,12 @@ enum States {
 class Utils {
 public:
     Utils(){ 
-      currentState = PRE_MASH;
-      prevState = PRE_MASH;
+
       // currentTemp = tempController.getCurrentTemp();  <- have this initialized before Utils.
     };
-
-    int currentState;
-    int prevState;
-
+    int currentTempSetpoint_f;
+    int timer_sec;
+    
     bool const debug = false;
     int thermistorBufferIndex = 0;
     double currentTemp_f;
