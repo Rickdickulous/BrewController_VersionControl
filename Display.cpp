@@ -47,8 +47,8 @@ void Display::dispUpdate() {
     }
     disp.tft.setCursor(127, 25);
     disp.tft.setTextColor(Tc);
-    disp.tft.print(utils.currentTempSetpoint_f);
-    prevTempSetpoint = utils.currentTempSetpoint_f;
+    disp.tft.print(currentTempSetpoint_f);
+    prevTempSetpoint = currentTempSetpoint_f;
 
     if (prevPrimaryTimer != 0) {
         disp.tft.setCursor(175, 125);
@@ -57,8 +57,8 @@ void Display::dispUpdate() {
     }
     disp.tft.setCursor(175, 125);
     disp.tft.setTextColor(Tc);
-    disp.tft.print(utils.timer_sec);
-    prevPrimaryTimer = utils.timer_sec;
+    disp.tft.print(timer_sec);
+    prevPrimaryTimer = timer_sec;
 }
 
 bool Display::touchControl(TS_Point& p) {
@@ -81,7 +81,7 @@ void ControllerUp::drawButton() {
 void ControllerUp::checkIfAreaTouched(TS_Point& point) {
     if ( (coords.x_origin <= point.x) && (point.x <= (coords.x_origin + coords.width )) ) {
         if ( (coords.y_origin <= point.y) && (point.y <= (coords.y_origin + coords.height)) ) {
-            utils.currentTempSetpoint_f++;
+            currentTempSetpoint_f++;
         }
     }
 }
@@ -97,7 +97,7 @@ void ControllerDown::drawButton() {
 void ControllerDown::checkIfAreaTouched(TS_Point& point) {
     if ( ( coords.x_origin <= point.x ) && (point.x <= (coords.x_origin + coords.width)) ) {
         if ( ( coords.y_origin <= point.y) && (point.y <= (coords.y_origin + coords.height)) ) {
-            utils.currentTempSetpoint_f--;
+            currentTempSetpoint_f--;
         }
     }
 }
@@ -112,7 +112,7 @@ void TimeUp::drawButton() {
 void TimeUp::checkIfAreaTouched(TS_Point& point) {
     if ( (coords.x_origin <= point.x ) && (point.x <= (coords.x_origin + coords.width)) ) {
         if ( coords.y_origin <= point.y && (point.y <= (coords.y_origin + coords.height)) ) {
-            utils.timer_sec++;
+            timer_sec++;
         }
     }
 }
@@ -128,7 +128,7 @@ void TimeDown::drawButton() {
 void TimeDown::checkIfAreaTouched(TS_Point& point) {
     if ( (coords.x_origin <= point.x ) && (point.x <= (coords.x_origin + coords.width)) ) {
         if ( coords.y_origin <= point.y && (point.y <= (coords.y_origin + coords.height)) ) {
-            utils.timer_sec--;
+            timer_sec--;
         }
     }
 }

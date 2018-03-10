@@ -13,6 +13,8 @@
 #define FLAME_SENSOR_PIN 1
 #define BUZZER_PIN 8
 
+extern int currentTempSetpoint_f;
+extern int timer_sec;
 
 enum States {
     PRE_MASH,
@@ -29,8 +31,6 @@ public:
 
       // currentTemp = tempController.getCurrentTemp();  <- have this initialized before Utils.
     };
-    int currentTempSetpoint_f;
-    int timer_sec;
     
     bool const debug = false;
     int thermistorBufferIndex = 0;
