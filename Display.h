@@ -58,14 +58,17 @@ struct BoxCoords {
 
 class Button {
 public:
-    Button() {};
+    Button(Adafruit_ILI9341 * tft_p, Adafruit_FT6206 * ctp_p) {tft_ptr = tft_p;
+                                                               ctp_ptr = ctp_p;};
     virtual void checkIfAreaTouched(TS_Point&) = 0;  // executes sideEffect function
     virtual void drawButton() = 0;
+    Adafruit_ILI9341 * tft_ptr;
+    Adafruit_FT6206 * ctp_ptr;
 };
 
 class ControllerUp : Button {
 public:
-      ControllerUp() {};
+      ControllerUp(Adafruit_ILI9341 * tft_p, Adafruit_FT6206 * ctp_p) : Button(tft_p,ctp_p) {};
       void drawButton();
       void checkIfAreaTouched(TS_Point&);
       ~ControllerUp() {};
@@ -77,7 +80,7 @@ private:               // x,  y,  w,  h
 
 class ControllerDown : Button {
 public:
-    ControllerDown() {};
+    ControllerDown(Adafruit_ILI9341 * tft_p, Adafruit_FT6206 * ctp_p) : Button(tft_p,ctp_p) {};
     void drawButton();
     void checkIfAreaTouched(TS_Point&);
     ~ControllerDown() {};
@@ -88,17 +91,17 @@ private:
 
 class TimeUp : Button {
 public:
-    TimeUp() {};
+    TimeUp(Adafruit_ILI9341 * tft_p, Adafruit_FT6206 * ctp_p) : Button(tft_p,ctp_p) {};
     void drawButton();
     void checkIfAreaTouched(TS_Point&);
-    ~TimeUp() {};
+    ~TimeUp() {Serial.println("Destroy TU");};
 private:
     BoxCoords coords = {140, 150, 80, 60};
 };
 
 class TimeDown : Button {
 public:
-    TimeDown() {};
+    TimeDown(Adafruit_ILI9341 * tft_p, Adafruit_FT6206 * ctp_p) : Button(tft_p,ctp_p) {};
     void drawButton();
     void checkIfAreaTouched(TS_Point&);
     ~TimeDown() {};
@@ -108,7 +111,7 @@ private:
 
 class StartTimer : Button {
 public:
-    StartTimer(){};
+    StartTimer(Adafruit_ILI9341 * tft_p, Adafruit_FT6206 * ctp_p) : Button(tft_p,ctp_p){};
     void drawButton();
     void checkIfAreaTouched(TS_Point&);
     ~StartTimer(){};
@@ -129,11 +132,11 @@ public:
     void dispUpdate();
     bool touchControl(TS_Point&);
 
-    ControllerUp contUp = ControllerUp();
-    ControllerDown contDown = ControllerDown();
-    TimeUp timeUp = TimeUp();
-    TimeDown timeDown = TimeDown();
-    StartTimer startTimer = StartTimer();
+    ControllerUp contUp = ControllerUp(&tft, &ctp);
+    ControllerDown contDown = ControllerDown(&tft, &ctp);
+    TimeUp timeUp = TimeUp(&tft, &ctp);
+    TimeDown timeDown = TimeDown(&tft, &ctp);
+    StartTimer startTimer = StartTimer(&tft, &ctp);
     static int const NumButtons = 5;  // must equal number of buttons in buttons[] below
     void * buttons[NumButtons] = { &contUp, &contDown, &timeUp, &timeDown, &startTimer };
 
@@ -141,8 +144,5 @@ public:
 	~Display(){};
 
 };
-
-//extern Utils utils;
-//extern Display disp;
 
 #endif // Display_h

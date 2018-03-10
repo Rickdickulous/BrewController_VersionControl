@@ -31,8 +31,6 @@ void Interface::manageTimedServices() {
 
             disp.dispUpdate();
 
-            // Serial.println(currentTempSetpoint_f);
-
             if (utils.debug)
             {
                 utils.printDebug();

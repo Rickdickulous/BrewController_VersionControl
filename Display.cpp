@@ -5,8 +5,6 @@ int prevTempSetpoint = 0;
 int prevValveSetpoint = 0;
 long prevPrimaryTimer = 0;
 
-Display disp = Display();
-
 void Display::init() {
 
     tft.begin();
@@ -19,50 +17,50 @@ void Display::init() {
         }
     
     // constants
-    disp.tft.setTextColor(Tc);
-    disp.tft.setTextSize(2);
+    tft.setTextColor(Tc);
+    tft.setTextSize(2);
     
-    disp.tft.setCursor(5, 25);
-    disp.tft.print("Mash Temp: ");
+    tft.setCursor(5, 25);
+    tft.print("Mash Temp: ");
     
-    disp.tft.setCursor(5, 125);
-    disp.tft.print("Mash Time Min: ");
+    tft.setCursor(5, 125);
+    tft.print("Mash Time Min: ");
 
     // buttons
-    for (int i=0; i < disp.NumButtons; i++) {
+    for (int i=0; i < NumButtons; i++) {
        Button * button_ptr = static_cast<Button *>(buttons[i]);
        button_ptr->drawButton();
     }
     
-    disp.tft.setTextSize(2);  // reset text size for live updates
+    tft.setTextSize(2);  // reset text size for live updates
 }
 
 
 void Display::dispUpdate() {
     // *** Display Target Temp ***
     if (prevTempSetpoint != 0) {
-        disp.tft.setCursor(127, 25);
-        disp.tft.setTextColor(Bg);
-        disp.tft.print(prevTempSetpoint);
+        tft.setCursor(127, 25);
+        tft.setTextColor(Bg);
+        tft.print(prevTempSetpoint);
     }
-    disp.tft.setCursor(127, 25);
-    disp.tft.setTextColor(Tc);
-    disp.tft.print(currentTempSetpoint_f);
+    tft.setCursor(127, 25);
+    tft.setTextColor(Tc);
+    tft.print(currentTempSetpoint_f);
     prevTempSetpoint = currentTempSetpoint_f;
 
     if (prevPrimaryTimer != 0) {
-        disp.tft.setCursor(175, 125);
-        disp.tft.setTextColor(Bg);
-        disp.tft.print(prevPrimaryTimer);
+        tft.setCursor(175, 125);
+        tft.setTextColor(Bg);
+        tft.print(prevPrimaryTimer);
     }
-    disp.tft.setCursor(175, 125);
-    disp.tft.setTextColor(Tc);
-    disp.tft.print(timer_sec);
+    tft.setCursor(175, 125);
+    tft.setTextColor(Tc);
+    tft.print(timer_sec);
     prevPrimaryTimer = timer_sec;
 }
 
 bool Display::touchControl(TS_Point& p) {
-    for (int i=0; i < disp.NumButtons; i++) {
+    for (int i=0; i < NumButtons; i++) {
        Button * button_ptr = static_cast<Button *>(buttons[i]);
        button_ptr->checkIfAreaTouched(p);
     }
@@ -70,11 +68,11 @@ bool Display::touchControl(TS_Point& p) {
 
 void ControllerUp::drawButton() {
     Serial.println("pm_TU_db");
-    disp.tft.drawRect(coords.x_origin, coords.y_origin, coords.width, coords.height, BLACK);
-    disp.tft.setCursor(170, 70);
-    disp.tft.setTextColor(RED);
-    disp.tft.setTextSize(3);
-    disp.tft.print("+");
+    tft_ptr->drawRect(coords.x_origin, coords.y_origin, coords.width, coords.height, BLACK);
+    tft_ptr->setCursor(170, 70);
+    tft_ptr->setTextColor(RED);
+    tft_ptr->setTextSize(3);
+    tft_ptr->print("+");
 }
 
 
@@ -87,11 +85,11 @@ void ControllerUp::checkIfAreaTouched(TS_Point& point) {
 }
 
 void ControllerDown::drawButton() {
-    disp.tft.drawRect(coords.x_origin, coords.y_origin, coords.width, coords.height, BLACK);
-    disp.tft.setCursor(55, 70);
-    disp.tft.setTextColor(BLUE);
-    disp.tft.setTextSize(3);
-    disp.tft.print("-");
+    tft_ptr->drawRect(coords.x_origin, coords.y_origin, coords.width, coords.height, BLACK);
+    tft_ptr->setCursor(55, 70);
+    tft_ptr->setTextColor(BLUE);
+    tft_ptr->setTextSize(3);
+    tft_ptr->print("-");
 }
 
 void ControllerDown::checkIfAreaTouched(TS_Point& point) {
@@ -103,10 +101,10 @@ void ControllerDown::checkIfAreaTouched(TS_Point& point) {
 }
 
 void TimeUp::drawButton() {
-    disp.tft.drawRect(coords.x_origin, coords.y_origin, coords.width, coords.height, BLACK);
-    disp.tft.setCursor(170, 170);
-    disp.tft.setTextColor(RED);
-    disp.tft.print("+");
+    tft_ptr->drawRect(coords.x_origin, coords.y_origin, coords.width, coords.height, BLACK);
+    tft_ptr->setCursor(170, 170);
+    tft_ptr->setTextColor(RED);
+    tft_ptr->print("+");
 }
 
 void TimeUp::checkIfAreaTouched(TS_Point& point) {
@@ -118,11 +116,11 @@ void TimeUp::checkIfAreaTouched(TS_Point& point) {
 }
 
 void TimeDown::drawButton() {
-    disp.tft.drawRect(coords.x_origin, coords.y_origin, coords.width, coords.height, BLACK);
-    disp.tft.setCursor(55, 170);
-    disp.tft.setTextColor(BLUE);
-    disp.tft.setTextSize(3);
-    disp.tft.print("-");
+    tft_ptr->drawRect(coords.x_origin, coords.y_origin, coords.width, coords.height, BLACK);
+    tft_ptr->setCursor(55, 170);
+    tft_ptr->setTextColor(BLUE);
+    tft_ptr->setTextSize(3);
+    tft_ptr->print("-");
 }
 
 void TimeDown::checkIfAreaTouched(TS_Point& point) {
@@ -134,11 +132,11 @@ void TimeDown::checkIfAreaTouched(TS_Point& point) {
 }
 
 void StartTimer::drawButton() {
-    disp.tft.drawRect(coords.x_origin, coords.y_origin, coords.width, coords.height, BLACK);
-    disp.tft.setCursor(90, 275);
-    disp.tft.setTextSize(2);
-    disp.tft.setTextColor(YELLOW);
-    disp.tft.print("START TIMER");
+    tft_ptr->drawRect(coords.x_origin, coords.y_origin, coords.width, coords.height, BLACK);
+    tft_ptr->setCursor(90, 275);
+    tft_ptr->setTextSize(2);
+    tft_ptr->setTextColor(YELLOW);
+    tft_ptr->print("START TIMER");
 }
 
 void StartTimer::checkIfAreaTouched(TS_Point& point) {
