@@ -13,8 +13,14 @@
 #define FLAME_SENSOR_PIN 1
 #define BUZZER_PIN 8
 
+#define CLOSED_LOOP 0
+#define OPEN_LOOP 1
+
 extern int currentTempSetpoint_f;
 extern int timer_sec;
+extern double currentTemp_f;
+extern int controlMode;
+extern int valveSetpoint;
 
 enum States {
     PRE_MASH,
@@ -34,8 +40,6 @@ public:
     
     bool const debug = false;
     int thermistorBufferIndex = 0;
-    double currentTemp_f;
-    int valveSetpoint;
     static int const ThermistorBufferSize = 20;
     int thermistorBuffer[ThermistorBufferSize];  // circular buffer for thermistor readings
 

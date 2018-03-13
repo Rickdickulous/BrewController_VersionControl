@@ -66,6 +66,16 @@ public:
     Adafruit_FT6206 * ctp_ptr;
 };
 
+class ControllerDown : Button {
+public:
+    ControllerDown(Adafruit_ILI9341 * tft_p, Adafruit_FT6206 * ctp_p) : Button(tft_p,ctp_p) {};
+    void drawButton();
+    void checkIfAreaTouched(TS_Point&);
+    ~ControllerDown() {};
+private:              // x,  y,  w,  h
+    BoxCoords coords = {30, 85, 80, 30}; 
+};
+
 class ControllerUp : Button {
 public:
       ControllerUp(Adafruit_ILI9341 * tft_p, Adafruit_FT6206 * ctp_p) : Button(tft_p,ctp_p) {};
@@ -74,18 +84,7 @@ public:
       ~ControllerUp() {};
       
 private:               // x,  y,  w,  h
-    BoxCoords coords = {140, 50, 80, 60};
-};
-
-
-class ControllerDown : Button {
-public:
-    ControllerDown(Adafruit_ILI9341 * tft_p, Adafruit_FT6206 * ctp_p) : Button(tft_p,ctp_p) {};
-    void drawButton();
-    void checkIfAreaTouched(TS_Point&);
-    ~ControllerDown() {};
-private:
-    BoxCoords coords = {30, 50, 80, 60}; 
+    BoxCoords coords = {140, 85, 80, 30};
 };
 
 
@@ -119,6 +118,16 @@ private:
     BoxCoords coords = {30, 230, 160, 70};
 };
 
+class ChangeMode : Button {
+public:
+    ChangeMode(Adafruit_ILI9341 * tft_p, Adafruit_FT6206 * ctp_p) : Button(tft_p,ctp_p){};
+    void drawButton();
+    void checkIfAreaTouched(TS_Point&);
+    ~ChangeMode() {};
+private:              // x,   y,   w,  h
+    BoxCoords coords = {30, 250, 160, 50};  
+};
+
 class Display
 {
 public:
@@ -137,8 +146,9 @@ public:
     TimeUp timeUp = TimeUp(&tft, &ctp);
     TimeDown timeDown = TimeDown(&tft, &ctp);
     StartTimer startTimer = StartTimer(&tft, &ctp);
-    static int const NumButtons = 5;  // must equal number of buttons in buttons[] below
-    void * buttons[NumButtons] = { &contUp, &contDown, &timeUp, &timeDown, &startTimer };
+    ChangeMode changeMode = ChangeMode(&tft, &ctp);
+    static int const NumButtons = 3;  // must equal number of buttons in buttons[] below
+    void * buttons[NumButtons] = { &contUp, &contDown, /*&timeUp, &timeDown, &startTimer*/ &changeMode };
 
 
 	~Display(){};

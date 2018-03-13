@@ -2,6 +2,10 @@
 
 int currentTempSetpoint_f;
 int timer_sec;
+double currentTemp_f;
+int controlMode;
+int valveSetpoint;
+
 Utils utils;
 
 void Utils::printDebug(void) {
@@ -14,7 +18,10 @@ void Utils::printDebug(void) {
 
 
 void Utils::init() {currentTempSetpoint_f = 150;
-                    timer_sec = 30;} 
+                    timer_sec = 30;
+                    currentTemp_f = 0;
+                    controlMode = CLOSED_LOOP;
+                    valveSetpoint = 0;} 
 
 
 void Utils::calcProbeTemp(void)
@@ -66,9 +73,9 @@ void Utils::everythingTempControl()
     //
     // get valve setpoint based on current probe temp
     //
-    calcValveSetpoint();  // determines how big flame should be (analogWrite takes int)
-
-    
+    if (controlMode == CLOSED_LOOP) {
+        calcValveSetpoint();  // determines how big flame should be (analogWrite takes int)
+    }
 
     analogWrite(VALVE_PIN, valveSetpoint);  // set valve open amount
 }
