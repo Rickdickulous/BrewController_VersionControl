@@ -50,8 +50,10 @@ public:
     void cacheThermistorReadings();
     void everythingTempControl();
     void printDebug();
+    void alarm();
 
     bool noiseMade = false;
+    bool flameOn = false;
 
     int calcValveSetpoint() {
         int retVal;

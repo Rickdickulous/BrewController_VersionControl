@@ -45,9 +45,11 @@ void Utils::handleFlameSensor(void)
     int flameSensorInput = analogRead(FLAME_SENSOR_PIN);
   if (flameSensorInput > 900) {
     //Serial.println("NO FLAME, WAYNE!");
+    flameOn = false;
   }
   else {
     //Serial.println("FLAME ON, GARTH!");
+    flameOn = true;
   }
 }
 
@@ -77,7 +79,19 @@ void Utils::everythingTempControl()
         calcValveSetpoint();  // determines how big flame should be (analogWrite takes int)
     }
 
-    analogWrite(VALVE_PIN, valveSetpoint);  // set valve open amount
+    if (flameOn) {
+        analogWrite(VALVE_PIN, valveSetpoint);  // set valve open amount
+    }
+    else {
+        alarm();
+    }
+}
+
+void Utils::alarm(void) {
+    for (int i=0; i<3; i++) {
+        tone(BUZZER_PIN, NOTE_C7, 35);  // best: C7
+        delay(200);
+    }
 }
 
 

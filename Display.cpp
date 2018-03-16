@@ -136,8 +136,11 @@ void ControllerUp::checkIfAreaTouched(TS_Point& point) {
                 currentTempSetpoint_f++;
             }
             else if (controlMode == OPEN_LOOP) {
-                prevValveSetpoint = valveSetpoint;
-                valveSetpoint++;
+                if (valveSetpoint < 255)
+                {
+                    prevValveSetpoint = valveSetpoint;
+                    valveSetpoint++;
+                }
             }
         }
     }
@@ -158,8 +161,11 @@ void ControllerDown::checkIfAreaTouched(TS_Point& point) {
                 currentTempSetpoint_f--;
             }
             else if (controlMode == OPEN_LOOP) {
-                prevValveSetpoint = valveSetpoint;
-                valveSetpoint--;
+                if (valveSetpoint > 0)
+                {
+                    prevValveSetpoint = valveSetpoint;
+                    valveSetpoint--;
+                }
             }
         }
     }
